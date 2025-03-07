@@ -4,22 +4,24 @@ let productsData = [];
 // Function to fetch product data from the JSON file
 fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
     .then(response => {
+        // Log the status and headers for debugging
         console.log('Response Status:', response.status);  // Log status code for debugging
         console.log('Response Headers:', response.headers);  // Log response headers for debugging
-
+        // Check if response is okay (status code 200)
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-
         return response.json();
     })
     .then(data => {
-        console.log('Fetched Data:', data);  // Log the fetched data to the console for verification
-        productsData = data;
-        displayProducts(productsData);  // Call displayProducts function to display the data
-        populateCategoryFilter(productsData);  // Populate the filter dropdown
+        console.log(data);  // Log the JSON data to check if it's correct
+        productsData = data;  // Store the data in productsData array
+        displayProducts(productsData);  // Call function to display products
+        populateCategoryFilter(productsData);  // Call function to populate category filter
     })
-    .catch(error => console.error('There was a problem with the fetch operation:', error));
+    .catch(error => {
+        console.error('Error fetching data:', error);  // Catch any errors in fetching the data
+    });
 
 // Function to display products in the table
 function displayProducts(products) {
@@ -67,4 +69,3 @@ document.getElementById('categoryFilter').addEventListener('change', function() 
     const filteredProducts = productsData.filter(product => product.Category === selectedCategory);
     displayProducts(filteredProducts);
 });
-
