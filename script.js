@@ -4,23 +4,20 @@ let productsData = [];
 // Function to fetch product data from the JSON file
 fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
     .then(response => {
-        // Log the status and headers for debugging
-        console.log('Response Status:', response.status);
-        console.log('Response Headers:', response.headers);
-        // Check if response is okay (status code 200)
+        console.log('Response Status:', response.status);  // Log status code for debugging
+        console.log('Response Headers:', response.headers);  // Log response headers for debugging
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         return response.json();
     })
     .then(data => {
-        productsData = data;  // Store fetched data in productsData array
-        console.log('Fetched Products:', productsData);
-        displayProducts(productsData);  // Display products
-        populateCategoryFilter(productsData);  // Populate category filter
+        productsData = data;  // Store the fetched data in the productsData array
+        displayProducts(productsData);  // Display products after fetching the data
+        populateCategoryFilter(productsData);  // Populate the category filter after fetching
     })
     .catch(error => {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error);  // Catch any errors in fetching the data
     });
 
 // Function to display products in the table
@@ -30,61 +27,34 @@ function displayProducts(products) {
 
     products.forEach(product => {
         let row = document.createElement('tr');
-
-        // Extract values for main columns
-        let columns = [
-            product.id || '',
-            product.name || '',
-            product.category || '',
-            product.softeningPoint || '',
-            product.density || '',
-            product.color || ''
+        
+        // Create a list of the properties in the correct order
+        const rowData = [
+            product.id || '', // ID
+            product.name || '', // Name
+            product.category || '', // Category
+            product.softeningPoint || '', // Softening Point
+            product.density || '', // Density
+            product.color || '', // Color
+            product.viscosity && product.viscosity[30] || '', // Viscosity at 30°C
+            product.viscosity && product.viscosity[120] || '', // Viscosity at 120°C
+            product.viscosity && product.viscosity[140] || '', // Viscosity at 140°C
+            product.viscosity && product.viscosity[160] || '', // Viscosity at 160°C
+            product.viscosity && product.viscosity[180] || '', // Viscosity at 180°C
+            product.viscosity && product.viscosity[200] || '', // Viscosity at 200°C
+            product.solidContent || '', // Solid Content
+            product.ph || '' // pH
         ];
 
-        // Add main columns to the row
-        columns.forEach(columnData => {
+        // Loop through each rowData and create a cell for each piece of data
+        rowData.forEach(data => {
             let cell = document.createElement('td');
-            cell.textContent = columnData;  // Add data to the cell
+            cell.textContent = data;
             row.appendChild(cell);
         });
-
-        // Add 6 Viscosity sub-columns (for different temperatures)
-        let viscosityCells = getViscosityCells(product.viscosity);
-        viscosityCells.forEach(viscosityCell => {
-            let cell = document.createElement('td');
-            cell.textContent = viscosityCell;
-            row.appendChild(cell);
-        });
-
-        // Add Solid Content and pH to the row
-        row.appendChild(createCell(product.solidContent || ''));
-        row.appendChild(createCell(product.pH || ''));
 
         tableBody.appendChild(row);  // Append the new row to the table
     });
-}
-
-// Function to handle Viscosity sub-columns for different temperatures
-function getViscosityCells(viscosity) {
-    if (!viscosity || typeof viscosity !== 'object') return ['', '', '', '', '', ''];
-    
-    // Assuming viscosity has the following keys for temperatures: 
-    // 30, 120, 140, 160, 180, and 200
-    return [
-        viscosity['30'] || '',
-        viscosity['120'] || '',
-        viscosity['140'] || '',
-        viscosity['160'] || '',
-        viscosity['180'] || '',
-        viscosity['200'] || ''
-    ];
-}
-
-// Function to create a table cell with given text content
-function createCell(content) {
-    let cell = document.createElement('td');
-    cell.textContent = content;
-    return cell;
 }
 
 // Function to populate the category filter dropdown
@@ -98,6 +68,13 @@ function populateCategoryFilter(products) {
         }
     });
 
+    // Clear existing options and add the new ones
+    categoryFilter.innerHTML = ''; // Clear previous filter options
+    let defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'All Categories';
+    categoryFilter.appendChild(defaultOption);
+
     categories.forEach(category => {
         let option = document.createElement('option');
         option.value = category;
@@ -109,8 +86,10 @@ function populateCategoryFilter(products) {
 // Filter products based on selected category
 document.getElementById('categoryFilter').addEventListener('change', function() {
     const selectedCategory = this.value;
-    const filteredProducts = selectedCategory ? 
-        productsData.filter(product => product.category === selectedCategory) : 
-        productsData;
-    displayProducts(filteredProducts);
+    if (selectedCategory) {
+        const filteredProducts = productsData.filter(product => product.category === selectedCategory);
+        displayProducts(filteredProducts);
+    } else {
+        displayProducts(productsData); // Show all products if no category is selected
+    }
 });
