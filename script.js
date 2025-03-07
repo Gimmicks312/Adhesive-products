@@ -1,134 +1,70 @@
+// Initialize an empty array to store product data
 let productsData = [];
 
-// Load product data when the page is loaded
-window.onload = function() {
-    // Load the product data from a remote file (GitHub URL in this case)
-    fetch('https://Gimmicks312.github.io/Adhesive-products/products.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);  // For debugging, check data in console
-            productsData = data; // Store the data for later use
-            displayProducts(productsData); // Display the products
-            populateCategoryFilter(productsData); // Populate category filter dynamically
-        })
-        .catch(error => {
-            console.error('Error loading products:', error);
-        });
-};
+// Function to fetch product data from the JSON file
+fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
+    .then(response => {
+        console.log('Response Status:', response.status);  // Log status code for debugging
+        console.log('Response Headers:', response.headers);  // Log response headers for debugging
 
-// Populate the category filter dynamically based on productsData
-function populateCategoryFilter(products) {
-    const categoryFilter = document.getElementById('category-filter');
-    const categories = new Set();  // Use a Set to avoid duplicates
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-    // Collect all unique categories from the product data
+        return response.json();
+    })
+    .then(data => {
+        console.log('Fetched Data:', data);  // Log the fetched data to the console for verification
+        productsData = data;
+        displayProducts(productsData);  // Call displayProducts function to display the data
+        populateCategoryFilter(productsData);  // Populate the filter dropdown
+    })
+    .catch(error => console.error('There was a problem with the fetch operation:', error));
+
+// Function to display products in the table
+function displayProducts(products) {
+    const tableBody = document.getElementById('productTableBody');
+    tableBody.innerHTML = ''; // Clear existing table data
+
     products.forEach(product => {
-        if (product.category) {
-            categories.add(product.category);
+        let row = document.createElement('tr');
+        
+        // Loop through each key-value pair in the product object
+        Object.keys(product).forEach(key => {
+            if (product[key] !== null && product[key] !== '') {
+                let cell = document.createElement('td');
+                cell.textContent = product[key];
+                row.appendChild(cell);
+            }
+        });
+
+        tableBody.appendChild(row);  // Append the new row to the table
+    });
+}
+
+// Function to populate the category filter dropdown
+function populateCategoryFilter(products) {
+    const categoryFilter = document.getElementById('categoryFilter');
+    const categories = new Set();
+
+    products.forEach(product => {
+        if (product.Category) {
+            categories.add(product.Category);
         }
     });
 
-    // Clear existing options
-    categoryFilter.innerHTML = '';
-
-    // Add default option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = 'all';
-    defaultOption.textContent = 'All Categories';
-    categoryFilter.appendChild(defaultOption);
-
-    // Add each category as an option
     categories.forEach(category => {
-        const option = document.createElement('option');
+        let option = document.createElement('option');
         option.value = category;
         option.textContent = category;
         categoryFilter.appendChild(option);
     });
 }
 
-// Display product data in the table
-function displayProducts(products) {
-    const tableBody = document.getElementById('product-table-body');
-    tableBody.innerHTML = ''; // Clear previous table content
-
-    products.forEach(product => {
-        const row = document.createElement('tr');
-
-        // Split viscosity values by commas, assuming multiple values per product
-        const viscosityValues = product.viscosity.split(',').map(val => val.trim());
-
-        row.innerHTML = `
-            <td>${product.id}</td>
-            <td>${product.name}</td>
-            <td>${product.category}</td>
-            <td>${product.softeningPoint}</td>
-
-            <!-- Viscosity columns -->
-            <td>${product.category === 'Water Base' ? viscosityValues[0] || '' : ''}</td> <!-- Viscosity @ 30°C for Water Base -->
-            <td>${product.category === 'Hotmelt' ? viscosityValues[0] || '' : ''}</td> <!-- Viscosity @ 120°C for Hotmelt -->
-            <td>${product.category === 'Hotmelt' ? viscosityValues[1] || '' : ''}</td> <!-- Viscosity @ 140°C for Hotmelt -->
-            <td>${product.category === 'Hotmelt' ? viscosityValues[2] || '' : ''}</td> <!-- Viscosity @ 160°C for Hotmelt -->
-            <td>${product.category === 'Hotmelt' ? viscosityValues[3] || '' : ''}</td> <!-- Viscosity @ 180°C for Hotmelt -->
-            <td>${product.category === 'Hotmelt' ? viscosityValues[4] || '' : ''}</td> <!-- Viscosity @ 200°C for Hotmelt -->
-
-            <!-- Additional columns for Water Base -->
-            <td>${product.category === 'Water Base' ? product.solidContent || '' : ''}</td> <!-- Solid Content for Water Base -->
-            <td>${product.category === 'Water Base' ? product.ph || '' : ''}</td> <!-- pH for Water Base -->
-
-            <!-- Other product data -->
-            <td>${product.density}</td>
-            <td>${product.color}</td>
-            <td>${product.applicationTemperature}</td>
-            <td>${product.feedingSpeed}</td>
-        `;
-
-        tableBody.appendChild(row);
-    });
-}
-
-// Function to filter products based on the selected category and filter value
-function filterProducts() {
-    const filterValue = document.getElementById('filter-value').value.toLowerCase();
-    const filterBy = document.getElementById('filter').value;
-    const categoryFilter = document.getElementById('category-filter').value;
-
-    let filteredProducts = productsData;
-
-    if (categoryFilter !== 'all') {
-        filteredProducts = filteredProducts.filter(product => product.category && product.category.toLowerCase() === categoryFilter.toLowerCase());
-    }
-
-    if (filterValue && filterBy !== 'all') {
-        filteredProducts = filteredProducts.filter(product => {
-            const fieldValue = product[filterBy];
-
-            if (typeof fieldValue === 'string') {
-                return fieldValue.toLowerCase().includes(filterValue);
-            }
-
-            if (filterBy === 'softeningPoint') {
-                const softeningPointValue = fieldValue.replace('°C', '').trim(); // Remove the "°C" and compare as number
-                return softeningPointValue.includes(filterValue);
-            }
-
-            return false;
-        });
-    } else if (filterBy === 'all' && filterValue) {
-        filteredProducts = filteredProducts.filter(product => {
-            for (const key in product) {
-                if (product[key] && product[key].toString().toLowerCase().includes(filterValue)) {
-                    return true; // If any field matches the filter
-                }
-            }
-            return false;
-        });
-    }
-
-    displayProducts(filteredProducts); // Display the filtered products
-}
+// Filter products based on selected category
+document.getElementById('categoryFilter').addEventListener('change', function() {
+    const selectedCategory = this.value;
+    const filteredProducts = productsData.filter(product => product.Category === selectedCategory);
+    displayProducts(filteredProducts);
+});
 
