@@ -59,7 +59,13 @@ function displayProducts(products) {
     products.forEach(product => {
         const row = document.createElement('tr');
 
-        const viscosityValues = product.viscosity.split(',').map(val => val.trim());
+        // Handle viscosity depending on product category
+        let viscosityValues = [];
+        if (product.category === 'Hotmelt') {
+            viscosityValues = product.viscosity.split(',').map(val => val.trim());
+        } else if (product.category === 'Water Base') {
+            viscosityValues = [product.viscosity_30];  // Only viscosity @ 30°C for Water Base
+        }
 
         row.innerHTML = `
             <td>${product.id}</td>
@@ -115,6 +121,10 @@ function filterProducts() {
             return false;
         });
     }
+
+    displayProducts(filteredProducts); // Display the filtered products
+}
+
 
     displayProducts(filteredProducts); // Display the filtered products
 }
