@@ -31,27 +31,60 @@ function displayProducts(products) {
     products.forEach(product => {
         let row = document.createElement('tr');
 
-        // Add columns dynamically based on the product fields
+        // Extract values for main columns
         let columns = [
             product.id || '',
             product.name || '',
             product.category || '',
             product.softeningPoint || '',
-            product.viscosity || '',
             product.density || '',
-            product.color || '',
-            product.solidContent || '',
-            product.pH || ''
+            product.color || ''
         ];
 
+        // Add main columns to the row
         columns.forEach(columnData => {
             let cell = document.createElement('td');
             cell.textContent = columnData;  // Add data to the cell
             row.appendChild(cell);
         });
 
+        // Add 6 Viscosity sub-columns (for different temperatures)
+        let viscosityCells = getViscosityCells(product.viscosity);
+        viscosityCells.forEach(viscosityCell => {
+            let cell = document.createElement('td');
+            cell.textContent = viscosityCell;
+            row.appendChild(cell);
+        });
+
+        // Add Solid Content and pH to the row
+        row.appendChild(createCell(product.solidContent || ''));
+        row.appendChild(createCell(product.pH || ''));
+
         tableBody.appendChild(row);  // Append the new row to the table
     });
+}
+
+// Function to handle Viscosity sub-columns for different temperatures
+function getViscosityCells(viscosity) {
+    if (!viscosity || typeof viscosity !== 'object') return ['', '', '', '', '', ''];
+    
+    // Assuming viscosity has the following keys for temperatures: 
+    // 30, 120, 140, 160, 180, and 200
+    return [
+        viscosity['30'] || '',
+        viscosity['120'] || '',
+        viscosity['140'] || '',
+        viscosity['160'] || '',
+        viscosity['180'] || '',
+        viscosity['200'] || ''
+    ];
+}
+
+// Function to create a table cell with given text content
+function createCell(content) {
+    let cell = document.createElement('td');
+    cell.textContent = content;
+    return cell;
 }
 
 // Function to populate the category filter dropdown
@@ -76,6 +109,8 @@ function populateCategoryFilter(products) {
 // Filter products based on selected category
 document.getElementById('categoryFilter').addEventListener('change', function() {
     const selectedCategory = this.value;
-    const filteredProducts = productsData.filter(product => product.category === selectedCategory);
+    const filteredProducts = selectedCategory ? 
+        productsData.filter(product => product.category === selectedCategory) : 
+        productsData;
     displayProducts(filteredProducts);
 });
