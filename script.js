@@ -14,27 +14,40 @@ window.onload = function() {
             console.log(data);  // For debugging, check data in console
             productsData = data; // Store the data for later use
             displayProducts(productsData); // Display the products
-            populateCategoryFilter(productsData); // Populate the category filter
+            populateCategoryFilter(productsData); // Populate category filter dynamically
         })
         .catch(error => {
             console.error('Error loading products:', error);
         });
 };
 
-// Extract unique categories from the product data and populate the category filter dropdown
+// Populate the category filter dynamically based on productsData
 function populateCategoryFilter(products) {
-    const categorySelect = document.getElementById('category-filter');
-    const categories = [...new Set(products.map(product => product.category))]; // Get unique categories
+    const categoryFilter = document.getElementById('category-filter');
+    const categories = new Set();  // Use a Set to avoid duplicates
 
-    // Add an option for "All"
-    categorySelect.innerHTML = '<option value="all">All Categories</option>';
+    // Collect all unique categories from the product data
+    products.forEach(product => {
+        if (product.category) {
+            categories.add(product.category);
+        }
+    });
 
-    // Add each category as an option in the dropdown
+    // Clear existing options
+    categoryFilter.innerHTML = '';
+
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = 'all';
+    defaultOption.textContent = 'All Categories';
+    categoryFilter.appendChild(defaultOption);
+
+    // Add each category as an option
     categories.forEach(category => {
         const option = document.createElement('option');
         option.value = category;
         option.textContent = category;
-        categorySelect.appendChild(option);
+        categoryFilter.appendChild(option);
     });
 }
 
@@ -69,16 +82,14 @@ function displayProducts(products) {
 function filterProducts() {
     const filterValue = document.getElementById('filter-value').value.toLowerCase();
     const filterBy = document.getElementById('filter').value;
-    const selectedCategory = document.getElementById('category-filter').value; // Get selected category
+    const categoryFilter = document.getElementById('category-filter').value;
 
     let filteredProducts = productsData;
 
-    // Filter by selected category
-    if (selectedCategory !== 'all') {
-        filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
+    if (categoryFilter !== 'all') {
+        filteredProducts = filteredProducts.filter(product => product.category && product.category.toLowerCase() === categoryFilter.toLowerCase());
     }
 
-    // Filter by the specified filter criteria (e.g., name, ID)
     if (filterValue && filterBy !== 'all') {
         filteredProducts = filteredProducts.filter(product => {
             const fieldValue = product[filterBy];
@@ -108,51 +119,4 @@ function filterProducts() {
     displayProducts(filteredProducts); // Display the filtered products
 }
 
-    });
-}
-
-// Function to filter products based on the selected category and filter value
-function filterProducts() {
-    const categoryFilterValue = document.getElementById('category-filter').value.toLowerCase();
-    const filterValue = document.getElementById('filter-value').value.toLowerCase();
-    const filterBy = document.getElementById('filter').value;
-
-    let filteredProducts = productsData;
-
-    // First filter by category if a specific category is selected
-    if (categoryFilterValue && categoryFilterValue !== 'all') {
-        filteredProducts = filteredProducts.filter(product => 
-            product.category.toLowerCase().includes(categoryFilterValue)
-        );
-    }
-
-    // Then apply the second filter (based on the selected attribute like ID, Name, etc.)
-    if (filterValue && filterBy !== 'all') {
-        filteredProducts = filteredProducts.filter(product => {
-            const fieldValue = product[filterBy];
-
-            if (typeof fieldValue === 'string') {
-                return fieldValue.toLowerCase().includes(filterValue);
-            }
-
-            if (filterBy === 'softeningPoint') {
-                const softeningPointValue = fieldValue.replace('°C', '').trim(); // Remove the "°C" and compare as number
-                return softeningPointValue.includes(filterValue);
-            }
-
-            return false;
-        });
-    } else if (filterBy === 'all' && filterValue) {
-        filteredProducts = filteredProducts.filter(product => {
-            for (const key in product) {
-                if (product[key] && product[key].toString().toLowerCase().includes(filterValue)) {
-                    return true; // If any field matches the filter
-                }
-            }
-            return false;
-        });
-    }
-
-    // Display the filtered products
-    displayProducts(filteredProducts);
 }
