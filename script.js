@@ -49,11 +49,20 @@ function displayProducts(products) {
 
 // Function to filter products based on the selected category and filter value
 function filterProducts() {
+    const categoryFilterValue = document.getElementById('category-filter').value.toLowerCase();
     const filterValue = document.getElementById('filter-value').value.toLowerCase();
     const filterBy = document.getElementById('filter').value;
 
     let filteredProducts = productsData;
 
+    // First filter by category if a specific category is selected
+    if (categoryFilterValue && categoryFilterValue !== 'all') {
+        filteredProducts = filteredProducts.filter(product => 
+            product.category.toLowerCase().includes(categoryFilterValue)
+        );
+    }
+
+    // Then apply the second filter (based on the selected attribute like ID, Name, etc.)
     if (filterValue && filterBy !== 'all') {
         filteredProducts = filteredProducts.filter(product => {
             const fieldValue = product[filterBy];
@@ -80,5 +89,6 @@ function filterProducts() {
         });
     }
 
-    displayProducts(filteredProducts); // Display the filtered results
+    // Display the filtered products
+    displayProducts(filteredProducts);
 }
