@@ -1,44 +1,75 @@
-/* Basic styling for the page */
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.filter-container {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.filter-container input {
-  padding: 5px;
-  margin-left: 10px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
 th, td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #ddd;
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
 }
 
 th {
-  background-color: #f4f4f4;
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
+    background-color: #f2f2f2;
+    font-weight: bold;
 }
 
 td {
-  text-align: center;
+    background-color: white;
+}
+
+/* Style for category filter and search input */
+#category-filter, #filter, #filter-value {
+    margin: 10px;
+    padding: 10px;
+    font-size: 14px;
+    width: 200px;
+}
+
+/* Styling specific to new columns */
+td:nth-child(11), th:nth-child(11) {
+    width: 120px;
+}
+
+td:nth-child(12), th:nth-child(12) {
+    width: 100px;
+}
+
+td:nth-child(13), th:nth-child(13) {
+    width: 80px;
+}
+
+td:nth-child(14), th:nth-child(14) {
+    width: 120px;
+}
+
+td:nth-child(15), th:nth-child(15) {
+    width: 100px;
+}
+
+td:nth-child(16), th:nth-child(16) {
+    width: 100px;
+}
+
+/* Optional: Style the filter input to make it more visually appealing */
+#filter-value {
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 14px;
 }
 
