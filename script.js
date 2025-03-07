@@ -59,27 +59,34 @@ function displayProducts(products) {
     products.forEach(product => {
         const row = document.createElement('tr');
 
-        // Handle viscosity depending on product category
-        let viscosityValues = [];
-        if (product.category === 'Hotmelt') {
-            viscosityValues = product.viscosity.split(',').map(val => val.trim());
-        } else if (product.category === 'Water Base') {
-            viscosityValues = [product.viscosity_30];  // Only viscosity @ 30°C for Water Base
-        }
+        // Split viscosity values by commas, assuming multiple values per product
+        const viscosityValues = product.viscosity.split(',').map(val => val.trim());
 
         row.innerHTML = `
             <td>${product.id}</td>
             <td>${product.name}</td>
             <td>${product.category}</td>
             <td>${product.softeningPoint}</td>
-            <td>${viscosityValues[0] || ''}</td>
-            <td>${viscosityValues[1] || ''}</td>
-            <td>${viscosityValues[2] || ''}</td>
-            <td>${viscosityValues[3] || ''}</td>
-            <td>${viscosityValues[4] || ''}</td>
+
+            <!-- Viscosity columns -->
+            <td>${product.category === 'Water Base' ? viscosityValues[0] || '' : ''}</td> <!-- Viscosity @ 30°C for Water Base -->
+            <td>${product.category === 'Hotmelt' ? viscosityValues[0] || '' : ''}</td> <!-- Viscosity @ 120°C for Hotmelt -->
+            <td>${product.category === 'Hotmelt' ? viscosityValues[1] || '' : ''}</td> <!-- Viscosity @ 140°C for Hotmelt -->
+            <td>${product.category === 'Hotmelt' ? viscosityValues[2] || '' : ''}</td> <!-- Viscosity @ 160°C for Hotmelt -->
+            <td>${product.category === 'Hotmelt' ? viscosityValues[3] || '' : ''}</td> <!-- Viscosity @ 180°C for Hotmelt -->
+            <td>${product.category === 'Hotmelt' ? viscosityValues[4] || '' : ''}</td> <!-- Viscosity @ 200°C for Hotmelt -->
+
+            <!-- Additional columns for Water Base -->
+            <td>${product.category === 'Water Base' ? product.solidContent || '' : ''}</td> <!-- Solid Content for Water Base -->
+            <td>${product.category === 'Water Base' ? product.ph || '' : ''}</td> <!-- pH for Water Base -->
+
+            <!-- Other product data -->
             <td>${product.density}</td>
             <td>${product.color}</td>
+            <td>${product.applicationTemperature}</td>
+            <td>${product.feedingSpeed}</td>
         `;
+
         tableBody.appendChild(row);
     });
 }
@@ -121,10 +128,6 @@ function filterProducts() {
             return false;
         });
     }
-
-    displayProducts(filteredProducts); // Display the filtered products
-}
-
 
     displayProducts(filteredProducts); // Display the filtered products
 }
