@@ -14,7 +14,9 @@ fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/prod
         displayProducts(productsData);
         populateCategoryFilter(productsData);
     })
-    .catch(error => console.error('Error fetching data:', error));
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
 
 // Function to display products in the table
 function displayProducts(products) {
@@ -24,25 +26,24 @@ function displayProducts(products) {
     products.forEach(product => {
         let row = document.createElement('tr');
 
-        // Define fixed column order
+        // Define the correct order of columns
         const columns = [
-            "id", "name", "category", "basis", "softeningPoint", 
-            "viscosity.30", "viscosity.120", "viscosity.140", 
-            "viscosity.160", "viscosity.180", "viscosity.200", 
-            "density", "color", "solidContent", "ph", "feedingSpeed"
+            'id', 'name', 'category', 'basis', 'softeningPoint',
+            'viscosity.30', 'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180', 'viscosity.200',
+            'density', 'color', 'solidContent', 'ph', 'feedingSpeed'
         ];
 
-        columns.forEach(col => {
+        columns.forEach(column => {
             let cell = document.createElement('td');
-            if (col.startsWith("viscosity.")) {
-                let temp = col.split(".")[1];  // Extract temperature
-                cell.textContent = product.viscosity && product.viscosity[temp] ? product.viscosity[temp] : ''; 
+            if (column.includes('viscosity')) {
+                let temp = column.split('.')[1];
+                cell.textContent = product.viscosity && product.viscosity[temp] ? product.viscosity[temp] : '';
             } else {
-                cell.textContent = product[col] || ''; 
+                cell.textContent = product[column] || '';
             }
             row.appendChild(cell);
         });
-
+        
         tableBody.appendChild(row);
     });
 }
@@ -50,8 +51,13 @@ function displayProducts(products) {
 // Function to populate the category filter dropdown
 function populateCategoryFilter(products) {
     const categoryFilter = document.getElementById('categoryFilter');
-    categoryFilter.innerHTML = '<option value="">All Categories</option>'; 
-    const categories = new Set(products.map(p => p.category).filter(Boolean));
+    const categories = new Set();
+
+    products.forEach(product => {
+        if (product.category) {
+            categories.add(product.category);
+        }
+    });
 
     categories.forEach(category => {
         let option = document.createElement('option');
@@ -65,7 +71,7 @@ function populateCategoryFilter(products) {
 document.getElementById('categoryFilter').addEventListener('change', function() {
     const selectedCategory = this.value;
     const filteredProducts = productsData.filter(product => 
-        selectedCategory === '' || product.category === selectedCategory
+        product.category === selectedCategory || selectedCategory === ''
     );
     displayProducts(filteredProducts);
 });
@@ -73,8 +79,10 @@ document.getElementById('categoryFilter').addEventListener('change', function() 
 // Dynamic Search Functionality
 document.getElementById('dynamicFilter').addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase();
-    const filteredProducts = productsData.filter(product => 
-        Object.values(product).some(value => String(value).toLowerCase().includes(searchTerm))
-    );
+    const filteredProducts = productsData.filter(product => {
+        return Object.values(product).some(value =>
+            typeof value === 'object' ? Object.values(value).some(v => String(v).toLowerCase().includes(searchTerm)) : String(value).toLowerCase().includes(searchTerm)
+        );
+    });
     displayProducts(filteredProducts);
 });
