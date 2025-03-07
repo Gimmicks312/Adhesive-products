@@ -7,31 +7,41 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Adhesive Products</h1>
-
-    <!-- Filter Dropdown -->
-    <label for="categoryFilter">Filter by Category: </label>
-    <select id="categoryFilter">
-        <option value="">--Select a Category--</option>
-    </select>
-
-    <!-- Table to Display Products -->
-    <table>
+    <header>
+        <h1>Adhesive Products</h1>
+    </header>
+    
+    <div>
+        <!-- Category filter dropdown -->
+        <label for="categoryFilter">Filter by Category: </label>
+        <select id="categoryFilter">
+            <option value="">Select Category</option>
+        </select>
+    </div>
+    
+    <table id="productTable">
         <thead>
             <tr>
+                <!-- Main columns -->
                 <th>ID</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th>Softening Point</th>
-                <th>Viscosity</th>
                 <th>Density</th>
                 <th>Color</th>
+                <!-- Sub-columns for Viscosity -->
+                <th>Viscosity at 30°C</th>
+                <th>Viscosity at 120°C</th>
+                <th>Viscosity at 140°C</th>
+                <th>Viscosity at 160°C</th>
+                <th>Viscosity at 180°C</th>
+                <th>Viscosity at 200°C</th>
                 <th>Solid Content</th>
                 <th>pH</th>
             </tr>
         </thead>
         <tbody id="productTableBody">
-            <!-- Data will be inserted here -->
+            <!-- Table rows will be inserted here by JavaScript -->
         </tbody>
     </table>
 
