@@ -3,7 +3,7 @@ let productsData = [];
 // Load product data when the page is loaded
 window.onload = function() {
     // Load the product data from a remote file (GitHub URL in this case)
-    fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
+    fetch('https://Gimmicks312.github.io/Adhesive-products/products.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
