@@ -118,3 +118,4 @@ function filterProducts() {
 
     displayProducts(filteredProducts); // Display the filtered products
 }
+
