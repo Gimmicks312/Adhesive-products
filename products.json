@@ -1,21 +1,68 @@
 [
   {
-    "id": 1,
-    "name": "EVA 8356.0",
+    "id": "1",
+    "name": "Hotmelt Product 1",
     "category": "Hotmelt",
-    "softeningPoint": "105°C",
-    "viscosity": "5000, 7000, 9000, 11000, 13000",
-    "density": "0.98 g/cm³",
-    "color": "Clear"
+    "basis": "EVA",
+    "appearance": "Granular",
+    "color": "0",
+    "viscosity": {
+      "120": "85,000",
+      "140": "90,000",
+      "160": "95,000",
+      "180": "100,000",
+      "200": "105,000"
+    },
+    "density": "1.07 g/cm³",
+    "softeningPoint": "100",
+    "applicationTemperature": "180-210",
+    "feedingSpeed": "10-60 m/min"
   },
   {
-    "id": 2,
-    "name": "APAO 8470.0",
-    "category": "PSA",
-    "softeningPoint": "110°C",
-    "viscosity": "6000, 8000, 10000, 12000, 14000",
+    "id": "2",
+    "name": "Water Base Product 1",
+    "category": "Water Base",
+    "basis": "PVAc",
+    "solidContent": "50%",
+    "ph": "6",
+    "viscosity": {
+      "30": "2,000"
+    },
     "density": "1.05 g/cm³",
-    "color": "Yellow"
+    "applicationQuantity": "150-200 g/m²",
+    "openTime": "60 sec"
+  },
+  {
+    "id": "3",
+    "name": "Hotmelt Product 2",
+    "category": "Hotmelt",
+    "basis": "APAO",
+    "appearance": "Pellets",
+    "color": "1",
+    "viscosity": {
+      "120": "90,000",
+      "140": "95,000",
+      "160": "100,000",
+      "180": "105,000",
+      "200": "110,000"
+    },
+    "density": "1.08 g/cm³",
+    "softeningPoint": "120",
+    "applicationTemperature": "190-220",
+    "feedingSpeed": "20-70 m/min"
+  },
+  {
+    "id": "4",
+    "name": "Water Base Product 2",
+    "category": "Water Base",
+    "basis": "VAE",
+    "solidContent": "40%",
+    "ph": "5.5",
+    "viscosity": {
+      "30": "2,500"
+    },
+    "density": "1.02 g/cm³",
+    "applicationQuantity": "100-150 g/m²",
+    "openTime": "90 sec"
   }
 ]
-
