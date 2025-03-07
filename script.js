@@ -2,7 +2,8 @@ let productsData = [];
 
 // Load product data when the page is loaded
 window.onload = function() {
-    fetch('http://localhost:3000/products.json')
+    // Load the product data from a remote file (GitHub URL in this case)
+    fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -10,7 +11,7 @@ window.onload = function() {
             return response.json();
         })
         .then(data => {
-            console.log(data);  // For debugging
+            console.log(data);  // For debugging, check data in console
             productsData = data; // Store the data for later use
             displayProducts(productsData); // Display the products
         })
@@ -76,9 +77,4 @@ function filterProducts() {
                 }
             }
             return false;
-        });
-    }
-
-    displayProducts(filteredProducts); // Display the filtered results
-}
-
+     
