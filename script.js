@@ -4,20 +4,18 @@ let productsData = [];
 // Function to fetch product data from the JSON file
 fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
     .then(response => {
-        // Log the status and headers for debugging
         console.log('Response Status:', response.status);  // Log status code for debugging
         console.log('Response Headers:', response.headers);  // Log response headers for debugging
-        // Check if response is okay (status code 200)
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json();
+        return response.json();  // Parse JSON data
     })
     .then(data => {
-        console.log(data);  // Log the JSON data to check if it's correct
-        productsData = data;  // Store the data in productsData array
-        displayProducts(productsData);  // Call function to display products
-        populateCategoryFilter(productsData);  // Call function to populate category filter
+        console.log('Fetched Data:', data);  // Log the fetched data
+        productsData = data;  // Store the data in the productsData array
+        displayProducts(productsData);  // Call the function to display the data
+        populateCategoryFilter(productsData);  // Call the function to populate the category filter
     })
     .catch(error => {
         console.error('Error fetching data:', error);  // Catch any errors in fetching the data
@@ -27,6 +25,10 @@ fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/prod
 function displayProducts(products) {
     const tableBody = document.getElementById('productTableBody');
     tableBody.innerHTML = ''; // Clear existing table data
+
+    if (products.length === 0) {
+        console.log('No products to display.');
+    }
 
     products.forEach(product => {
         let row = document.createElement('tr');
@@ -64,6 +66,12 @@ function populateCategoryFilter(products) {
 }
 
 // Filter products based on selected category
+document.getElementById('categoryFilter').addEventListener('change', function() {
+    const selectedCategory = this.value;
+    const filteredProducts = productsData.filter(product => product.Category === selectedCategory);
+    displayProducts(filteredProducts);
+});
+
 document.getElementById('categoryFilter').addEventListener('change', function() {
     const selectedCategory = this.value;
     const filteredProducts = productsData.filter(product => product.Category === selectedCategory);
