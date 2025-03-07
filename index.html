@@ -3,57 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adhesive Product Data</title>
+    <title>Adhesive Products</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Adhesive Product Data</h1>
+    <header>
+        <h1>Adhesive Products</h1>
+    </header>
 
-    <!-- Filter options -->
+    <!-- Category Filter Dropdown -->
     <div>
-        <label for="category-filter">Select Category: </label>
-        <select id="category-filter">
-            <!-- Categories will be populated dynamically -->
+        <select id="categoryFilter">
+            <option value="">Select Category</option>
         </select>
-
-        <label for="filter">Filter by: </label>
-        <select id="filter">
-            <option value="all">All Fields</option>
-            <option value="id">ID</option>
-            <option value="name">Name</option>
-            <option value="category">Category</option>
-            <option value="softeningPoint">Softening Point</option>
-            <option value="viscosity">Viscosity</option>
-            <option value="density">Density</option>
-            <option value="color">Color</option>
-        </select>
-
-        <label for="filter-value">Enter Filter Value: </label>
-        <input type="text" id="filter-value" placeholder="Filter data...">
     </div>
 
-    <!-- Product Table -->
+    <!-- Table to Display Products -->
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
+                <!-- Adjust the columns as per your product data -->
                 <th>Category</th>
+                <th>Name</th>
                 <th>Softening Point</th>
-                <!-- Viscosity Columns -->
-                <th>Viscosity @ 30°C</th> <!-- For Water Base -->
-                <th>Viscosity @ 120°C</th> <!-- For Hotmelt -->
-                <th>Viscosity @ 140°C</th> <!-- For Hotmelt -->
-                <th>Viscosity @ 160°C</th> <!-- For Hotmelt -->
-                <th>Viscosity @ 180°C</th> <!-- For Hotmelt -->
-                <th>Viscosity @ 200°C</th> <!-- For Hotmelt -->
-                <!-- Additional Columns for Water Base -->
-                <th>Solid Content</th> <!-- For Water Base -->
-                <th>pH</th> <!-- For Water Base -->
+                <th>Viscosity</th>
                 <th>Density</th>
                 <th>Color</th>
-                <th>Application Temperature</th>
-                <th>Feeding Speed</th>
+                <!-- Add other columns based on your data -->
             </tr>
         </thead>
-        <tbody id="prod
+        <tbody id="productTableBody">
+            <!-- Product rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
