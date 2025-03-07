@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "name": "EVA 8356.0",
+    "category": "Hotmelt",
+    "softeningPoint": "105°C",
+    "viscosity": "5000, 7000, 9000, 11000, 13000",
+    "density": "0.98 g/cm³",
+    "color": "Clear"
+  },
+  {
+    "id": 2,
+    "name": "APAO 8470.0",
+    "category": "PSA",
+    "softeningPoint": "110°C",
+    "viscosity": "6000, 8000, 10000, 12000, 14000",
+    "density": "1.05 g/cm³",
+    "color": "Yellow"
+  }
+]
+
