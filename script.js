@@ -77,4 +77,9 @@ function filterProducts() {
                 }
             }
             return false;
-     
+        });
+    }
+
+    displayProducts(filteredProducts); // Display the filtered results
+}
+
