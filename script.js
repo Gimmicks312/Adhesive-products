@@ -44,6 +44,8 @@ function displayProducts(products) {
 
         tableBody.appendChild(row);  // Append the new row to the table
     });
+
+    console.log('Table populated with products');  // Ensure this message is logged
 }
 
 // Function to populate the category filter dropdown
@@ -57,23 +59,25 @@ function populateCategoryFilter(products) {
         }
     });
 
+    console.log('Categories to populate:', categories);  // Log the categories being added
+
     categories.forEach(category => {
         let option = document.createElement('option');
         option.value = category;
         option.textContent = category;
         categoryFilter.appendChild(option);
     });
+
+    // Select the first option if there are categories available
+    if (categories.size > 0) {
+        categoryFilter.value = [...categories][0];
+    }
 }
 
 // Filter products based on selected category
 document.getElementById('categoryFilter').addEventListener('change', function() {
     const selectedCategory = this.value;
-    const filteredProducts = productsData.filter(product => product.Category === selectedCategory);
-    displayProducts(filteredProducts);
-});
-
-document.getElementById('categoryFilter').addEventListener('change', function() {
-    const selectedCategory = this.value;
+    console.log('Selected category:', selectedCategory);  // Log selected category for debugging
     const filteredProducts = productsData.filter(product => product.Category === selectedCategory);
     displayProducts(filteredProducts);
 });
