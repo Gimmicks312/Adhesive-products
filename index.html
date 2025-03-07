@@ -10,12 +10,21 @@
     <h1>Adhesive Products</h1>
     
     <div class="filter-container">
+        <label for="category-filter">Filter by category: </label>
+        <select id="category-filter" onchange="filterProducts()">
+            <option value="all">Choose Category</option>
+            <option value="Hotmelt">Hotmelt</option>
+            <option value="PSA">PSA</option>
+            <option value="Water base">Water base</option>
+        </select>
+    </div>
+
+    <div class="filter-container">
         <label for="filter">Filter by: </label>
         <select id="filter" onchange="filterProducts()">
             <option value="all">All</option>
             <option value="id">ID</option>
             <option value="name">Name</option>
-            <option value="category">Category</option>
             <option value="softeningPoint">Softening Point</option>
             <option value="viscosity">Viscosity</option>
             <option value="density">Density</option>
@@ -29,6 +38,34 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Category</th>
+                <th>Softening Point</th>
+                <th colspan="5">Viscosity</th>
+                <th>Density</th>
+                <th>Color</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>@120</th>
+                <th>@140</th>
+                <th>@160</th>
+                <th>@180</th>
+                <th>@200</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="product-table-body">
+            <!-- Product rows will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+    <script src="script.js"></script>
+</body>
+</html>
+
                 <th>Category</th>
                 <th>Softening Point</th>
                 <th colspan="5">Viscosity</th>
