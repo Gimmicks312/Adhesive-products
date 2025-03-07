@@ -14,11 +14,29 @@ window.onload = function() {
             console.log(data);  // For debugging, check data in console
             productsData = data; // Store the data for later use
             displayProducts(productsData); // Display the products
+            populateCategoryFilter(productsData); // Populate the category filter
         })
         .catch(error => {
             console.error('Error loading products:', error);
         });
 };
+
+// Extract unique categories from the product data and populate the category filter dropdown
+function populateCategoryFilter(products) {
+    const categorySelect = document.getElementById('category-filter');
+    const categories = [...new Set(products.map(product => product.category))]; // Get unique categories
+
+    // Add an option for "All"
+    categorySelect.innerHTML = '<option value="all">All Categories</option>';
+
+    // Add each category as an option in the dropdown
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    });
+}
 
 // Display product data in the table
 function displayProducts(products) {
@@ -44,6 +62,52 @@ function displayProducts(products) {
             <td>${product.color}</td>
         `;
         tableBody.appendChild(row);
+    });
+}
+
+// Function to filter products based on the selected category and filter value
+function filterProducts() {
+    const filterValue = document.getElementById('filter-value').value.toLowerCase();
+    const filterBy = document.getElementById('filter').value;
+    const selectedCategory = document.getElementById('category-filter').value; // Get selected category
+
+    let filteredProducts = productsData;
+
+    // Filter by selected category
+    if (selectedCategory !== 'all') {
+        filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
+    }
+
+    // Filter by the specified filter criteria (e.g., name, ID)
+    if (filterValue && filterBy !== 'all') {
+        filteredProducts = filteredProducts.filter(product => {
+            const fieldValue = product[filterBy];
+
+            if (typeof fieldValue === 'string') {
+                return fieldValue.toLowerCase().includes(filterValue);
+            }
+
+            if (filterBy === 'softeningPoint') {
+                const softeningPointValue = fieldValue.replace('°C', '').trim(); // Remove the "°C" and compare as number
+                return softeningPointValue.includes(filterValue);
+            }
+
+            return false;
+        });
+    } else if (filterBy === 'all' && filterValue) {
+        filteredProducts = filteredProducts.filter(product => {
+            for (const key in product) {
+                if (product[key] && product[key].toString().toLowerCase().includes(filterValue)) {
+                    return true; // If any field matches the filter
+                }
+            }
+            return false;
+        });
+    }
+
+    displayProducts(filteredProducts); // Display the filtered products
+}
+
     });
 }
 
