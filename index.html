@@ -9,10 +9,18 @@
 <body>
     <h1>Adhesive Product Database</h1>
 
-    <!-- Button to open Advanced Search -->
+    <!-- Regular Filters -->
+    <div>
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+        </select>
+        <input type="text" id="dynamicFilter" placeholder="Search products">
+    </div>
+
+    <!-- Button to Open Advanced Search Pop-up -->
     <button id="advancedSearchBtn">Advanced Search</button>
 
-    <!-- Advanced Search Popup -->
+    <!-- Advanced Search Pop-up -->
     <div id="advancedSearchPopup" class="popup">
         <div class="popup-content">
             <span class="close-btn">&times;</span>
@@ -44,14 +52,6 @@
             </form>
         </div>
     </div>
-
-    <!-- Filter Section -->
-    <select id="categoryFilter">
-        <option value="">All Categories</option>
-    </select>
-    
-    <!-- Search Box -->
-    <input type="text" id="dynamicFilter" placeholder="Search products">
 
     <!-- Product Table -->
     <table>
