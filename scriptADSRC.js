@@ -1,66 +1,75 @@
-document.getElementById('advancedSearchBtn').addEventListener('click', function() {
-    document.getElementById('advancedSearchModal').style.display = 'block';
-});
-
-// Close the modal when the close button is clicked
-document.getElementById('closeModal').addEventListener('click', function() {
-    document.getElementById('advancedSearchModal').style.display = 'none';
-});
-
-// Function to create the advanced search form dynamically
-function createAdvancedSearchForm() {
-    const form = document.getElementById('advancedSearchForm');
-    const fields = [
-        { id: 'viscosityRange', label: 'Viscosity @ 200°C', type: 'range', min: 0, max: 200000 },
-        { id: 'phRange', label: 'pH', type: 'range', min: 0, max: 14 },
-        { id: 'feedingSpeedRange', label: 'Feeding Speed (m/min)', type: 'range', min: 0, max: 100 },
-        { id: 'softeningPointRange', label: 'Softening Point', type: 'range', min: 0, max: 200 },
-        { id: 'densityRange', label: 'Density (g/cm³)', type: 'range', min: 0, max: 2 }
-    ];
-
-    fields.forEach(field => {
-        const label = document.createElement('label');
-        label.setAttribute('for', field.id);
-        label.textContent = field.label;
-
-        const input = document.createElement('input');
-        input.setAttribute('type', field.type);
-        input.setAttribute('id', field.id);
-        input.setAttribute('min', field.min);
-        input.setAttribute('max', field.max);
-        input.setAttribute('value', field.min);
-
-        form.appendChild(label);
-        form.appendChild(input);
-        form.appendChild(document.createElement('br'));
+document.addEventListener('DOMContentLoaded', function () {
+  // Handling "Advanced Search" button click
+  const advancedSearchButton = document.getElementById('advancedSearchButton');
+  if (advancedSearchButton) {
+    advancedSearchButton.addEventListener('click', function () {
+      // Open the advanced search pop-up
+      document.getElementById('advancedSearchPopup').style.display = 'block';
     });
-}
+  } else {
+    console.error('Advanced Search button not found!');
+  }
 
-// Call the function to create the form when the page loads
-window.onload = createAdvancedSearchForm;
-
-// Add event listener to the search button in the pop-up
-document.getElementById('searchAdvanced').addEventListener('click', function() {
-    const viscosityRange = document.getElementById('viscosityRange').value;
-    const phRange = document.getElementById('phRange').value;
-    const feedingSpeedRange = document.getElementById('feedingSpeedRange').value;
-    const softeningPointRange = document.getElementById('softeningPointRange').value;
-    const densityRange = document.getElementById('densityRange').value;
-
-    // Filter products based on advanced search values
-    const filteredProducts = productsData.filter(product => {
-        return (
-            product.viscosity && product.viscosity['200'] >= viscosityRange &&
-            product.ph >= phRange &&
-            product.feedingSpeed && product.feedingSpeed >= feedingSpeedRange &&
-            product.softeningPoint >= softeningPointRange &&
-            product.density && product.density >= densityRange
-        );
+  // Handling "Close" button for the pop-up
+  const closePopupButton = document.getElementById('closePopupButton');
+  if (closePopupButton) {
+    closePopupButton.addEventListener('click', function () {
+      // Close the advanced search pop-up
+      document.getElementById('advancedSearchPopup').style.display = 'none';
     });
+  } else {
+    console.error('Close button for pop-up not found!');
+  }
 
-    // Display the filtered products
-    displayProducts(filteredProducts);
+  // Fetch and display the product data
+  function fetchProductData() {
+    fetch('products.json')
+      .then((response) => response.json())
+      .then((data) => {
+        displayProducts(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
 
-    // Close the modal after search
-    document.getElementById('advancedSearchModal').style.display = 'none';
+  function displayProducts(products) {
+    const tableBody = document.getElementById('productTableBody');
+    if (!tableBody) {
+      console.error('Table body element not found!');
+      return;
+    }
+
+    tableBody.innerHTML = ''; // Clear any existing rows
+
+    products.forEach((product) => {
+      let row = `<tr>
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>${product.basis}</td>
+                    <td>${product.appearance || ''}</td>
+                    <td>${product.color || ''}</td>
+                    <td>${product.softeningPoint || ''}</td>
+                    <td>${product.viscosity ? product.viscosity['30'] : ''}</td>
+                    <td>${product.viscosity ? product.viscosity['120'] : ''}</td>
+                    <td>${product.viscosity ? product.viscosity['140'] : ''}</td>
+                    <td>${product.viscosity ? product.viscosity['160'] : ''}</td>
+                    <td>${product.viscosity ? product.viscosity['180'] : ''}</td>
+                    <td>${product.viscosity ? product.viscosity['200'] : ''}</td>
+                    <td>${product.density || ''}</td>
+                    <td>${product.solidContent || ''}</td>
+                    <td>${product.pH || ''}</td>
+                    <td>${product.applicationTemperature || ''}</td>
+                    <td>${product.feedingSpeed || ''}</td>
+                    <td>${product.applicationQuantity || ''}</td>
+                    <td>${product.openTime || ''}</td>
+                  </tr>`;
+
+      tableBody.innerHTML += row;
+    });
+  }
+
+  // Initial fetch on page load
+  fetchProductData();
 });
