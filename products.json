@@ -16,19 +16,28 @@
     "density": "1.07 g/cm³",
     "softeningPoint": "100",
     "applicationTemperature": "180-210",
-    "feedingSpeed": "10-60 m/min"
+    "feedingSpeed": "10-60 m/min",
+    "solidContent": "",
+    "ph": "",
+    "applicationQuantity": "",
+    "openTime": ""
   },
   {
     "id": "2",
     "name": "Water Base Product 1",
     "category": "Water Base",
     "basis": "PVAc",
-    "solidContent": "50%",
-    "ph": "6",
+    "appearance": "",
+    "color": "",
     "viscosity": {
       "30": "2,000"
     },
     "density": "1.05 g/cm³",
+    "softeningPoint": "",
+    "applicationTemperature": "",
+    "feedingSpeed": "",
+    "solidContent": "50%",
+    "ph": "6",
     "applicationQuantity": "150-200 g/m²",
     "openTime": "60 sec"
   },
@@ -49,19 +58,28 @@
     "density": "1.08 g/cm³",
     "softeningPoint": "120",
     "applicationTemperature": "190-220",
-    "feedingSpeed": "20-70 m/min"
+    "feedingSpeed": "20-70 m/min",
+    "solidContent": "",
+    "ph": "",
+    "applicationQuantity": "",
+    "openTime": ""
   },
   {
     "id": "4",
     "name": "Water Base Product 2",
     "category": "Water Base",
     "basis": "VAE",
-    "solidContent": "40%",
-    "ph": "5.5",
+    "appearance": "",
+    "color": "",
     "viscosity": {
       "30": "2,500"
     },
     "density": "1.02 g/cm³",
+    "softeningPoint": "",
+    "applicationTemperature": "",
+    "feedingSpeed": "",
+    "solidContent": "40%",
+    "ph": "5.5",
     "applicationQuantity": "100-150 g/m²",
     "openTime": "90 sec"
   }
