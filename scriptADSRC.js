@@ -1,13 +1,12 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Check if the necessary DOM elements exist
-    const tableBody = document.getElementById('productTableBody');
-    if (!tableBody) {
-        console.error('Error: productTableBody element not found.');
-        return;
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure advanced search button exists before adding event listener
+    const advancedSearchButton = document.getElementById("advancedSearchButton");
+    if (advancedSearchButton) {
+        advancedSearchButton.addEventListener("click", openAdvancedSearch);
     }
 
-    // Fetching the product data from the products.json file
-    fetch('products.json')
+    // Fetch data and ensure the element exists before using it
+    fetch("products.json")
         .then(response => response.json())
         .then(data => {
             productsData = data;
@@ -20,58 +19,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to display products in the table
     function displayProducts(products) {
-        // Ensure the table body exists before proceeding
-        if (!tableBody) {
-            console.error('Error: productTableBody element not found.');
-            return;
+        const tableBody = document.getElementById('productTableBody');
+        if (tableBody) {
+            tableBody.innerHTML = ''; // Clear the table first
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>${product.softeningPoint}</td>
+                    <td>${product.viscosity30}</td>
+                    <td>${product.density}</td>
+                    <td>${product.ph}</td>
+                    <td>${product.applicationTemp}</td>
+                    <td>${product.feedingSpeed}</td>
+                `;
+                tableBody.appendChild(row);
+            });
         }
-
-        tableBody.innerHTML = '';  // Clear previous data
-
-        products.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td>${product.category}</td>
-                <td>${product.basis || ''}</td>
-                <td>${product.appearance || ''}</td>
-                <td>${product.color || ''}</td>
-                <td>${product.softeningPoint || ''}</td>
-                <td>${product.viscosity ? product.viscosity['30'] : ''}</td>
-                <td>${product.viscosity ? product.viscosity['120'] : ''}</td>
-                <td>${product.viscosity ? product.viscosity['140'] : ''}</td>
-                <td>${product.viscosity ? product.viscosity['160'] : ''}</td>
-                <td>${product.viscosity ? product.viscosity['180'] : ''}</td>
-                <td>${product.viscosity ? product.viscosity['200'] : ''}</td>
-                <td>${product.density || ''}</td>
-                <td>${product.solidContent || ''}</td>
-                <td>${product.ph || ''}</td>
-                <td>${product.applicationTemperature || ''}</td>
-                <td>${product.feedingSpeed || ''}</td>
-                <td>${product.applicationQuantity || ''}</td>
-                <td>${product.openTime || ''}</td>
-            `;
-            tableBody.appendChild(row);
-        });
     }
 
-    // Function to populate the category filter dropdown
+    // Function to populate the category filter
     function populateCategoryFilter(products) {
-        const categories = [...new Set(products.map(product => product.category))];
-        const categorySelect = document.getElementById('categoryFilter');
-        if (!categorySelect) {
-            console.error('Error: categoryFilter element not found.');
-            return;
+        const categoryFilter = document.getElementById('filterCategory');
+        if (categoryFilter) {
+            const categories = new Set(products.map(product => product.category));
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
         }
-
-        categorySelect.innerHTML = '<option value="">All Categories</option>';
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categorySelect.appendChild(option);
-        });
     }
-});
 
+    // Handle advanced search modal opening
+    function openAdvancedSearch() {
+        const modal = document.getElementById("searchModal");
+        if (modal) {
+            modal.style.display = "block";
+        }
+    }
+
+    // Handle closing the advanced search modal
+    function closeAdvancedSearch() {
+        const modal = document.getElementById("searchModal");
+        if (modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Add additional logic for applying advanced search filters, resetting them, etc.
+});
