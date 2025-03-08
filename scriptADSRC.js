@@ -1,74 +1,69 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Ensure advanced search button exists before adding event listener
-    const advancedSearchButton = document.getElementById("advancedSearchButton");
-    if (advancedSearchButton) {
-        advancedSearchButton.addEventListener("click", openAdvancedSearch);
-    }
+let advancedSearchData = [];
 
-    // Fetch data and ensure the element exists before using it
-    fetch("products.json")
-        .then(response => response.json())
-        .then(data => {
-            productsData = data;
-            displayProducts(productsData);
-            populateCategoryFilter(productsData);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
+// Open the advanced search pop-up
+function openAdvancedSearch() {
+    const popup = document.getElementById('advancedSearchPopup');
+    if (popup) popup.style.display = 'block';
+}
 
-    // Function to display products in the table
-    function displayProducts(products) {
-        const tableBody = document.getElementById('productTableBody');
-        if (tableBody) {
-            tableBody.innerHTML = ''; // Clear the table first
-            products.forEach(product => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${product.id}</td>
-                    <td>${product.name}</td>
-                    <td>${product.category}</td>
-                    <td>${product.softeningPoint}</td>
-                    <td>${product.viscosity30}</td>
-                    <td>${product.density}</td>
-                    <td>${product.ph}</td>
-                    <td>${product.applicationTemp}</td>
-                    <td>${product.feedingSpeed}</td>
-                `;
-                tableBody.appendChild(row);
-            });
+// Close the advanced search pop-up
+function closeAdvancedSearch() {
+    const popup = document.getElementById('advancedSearchPopup');
+    if (popup) popup.style.display = 'none';
+}
+
+// Apply advanced search filters
+function applyAdvancedSearch() {
+    const filters = {
+        softeningPointMin: document.getElementById('softeningPointMin').value,
+        softeningPointMax: document.getElementById('softeningPointMax').value,
+        viscosity30Min: document.getElementById('viscosity30Min').value,
+        viscosity30Max: document.getElementById('viscosity30Max').value,
+        viscosity120Min: document.getElementById('viscosity120Min').value,
+        viscosity120Max: document.getElementById('viscosity120Max').value,
+        viscosity140Min: document.getElementById('viscosity140Min').value,
+        viscosity140Max: document.getElementById('viscosity140Max').value,
+        viscosity160Min: document.getElementById('viscosity160Min').value,
+        viscosity160Max: document.getElementById('viscosity160Max').value,
+        viscosity180Min: document.getElementById('viscosity180Min').value,
+        viscosity180Max: document.getElementById('viscosity180Max').value,
+        viscosity200Min: document.getElementById('viscosity200Min').value,
+        viscosity200Max: document.getElementById('viscosity200Max').value,
+        densityMin: document.getElementById('densityMin').value,
+        densityMax: document.getElementById('densityMax').value,
+        solidContentMin: document.getElementById('solidContentMin').value,
+        solidContentMax: document.getElementById('solidContentMax').value,
+        phMin: document.getElementById('phMin').value,
+        phMax: document.getElementById('phMax').value,
+        applicationTempMin: document.getElementById('applicationTempMin').value,
+        applicationTempMax: document.getElementById('applicationTempMax').value,
+        feedingSpeedMin: document.getElementById('feedingSpeedMin').value,
+        feedingSpeedMax: document.getElementById('feedingSpeedMax').value,
+        applicationQuantityMin: document.getElementById('applicationQuantityMin').value,
+        applicationQuantityMax: document.getElementById('applicationQuantityMax').value,
+        openTimeMin: document.getElementById('openTimeMin').value,
+        openTimeMax: document.getElementById('openTimeMax').value
+    };
+
+    advancedSearchData = productsData.filter(product => {
+        for (let key in filters) {
+            if (filters[key] && (parseFloat(product[key]) < parseFloat(filters[key]) && key.includes('Min')) ||
+                (parseFloat(product[key]) > parseFloat(filters[key]) && key.includes('Max'))) {
+                return false;
+            }
         }
-    }
+        return true;
+    });
 
-    // Function to populate the category filter
-    function populateCategoryFilter(products) {
-        const categoryFilter = document.getElementById('filterCategory');
-        if (categoryFilter) {
-            const categories = new Set(products.map(product => product.category));
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                categoryFilter.appendChild(option);
-            });
-        }
-    }
+    displayProducts(advancedSearchData);
+    closeAdvancedSearch();
+}
 
-    // Handle advanced search modal opening
-    function openAdvancedSearch() {
-        const modal = document.getElementById("searchModal");
-        if (modal) {
-            modal.style.display = "block";
-        }
-    }
+// Reset advanced search filters
+function resetAdvancedSearch() {
+    const form = document.getElementById('advancedSearchForm');
+    if (form) form.reset(); // Reset the form fields
 
-    // Handle closing the advanced search modal
-    function closeAdvancedSearch() {
-        const modal = document.getElementById("searchModal");
-        if (modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Add additional logic for applying advanced search filters, resetting them, etc.
-});
+    displayProducts(productsData); // Show all products
+    closeAdvancedSearch();
+}
