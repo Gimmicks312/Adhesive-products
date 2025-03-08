@@ -21,20 +21,20 @@ fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/prod
 // Function to display products in the table
 function displayProducts(products) {
     const tableBody = document.getElementById('productTableBody');
-    tableBody.innerHTML = '';  // Clear the table before adding new rows
+    tableBody.innerHTML = '';
 
     products.forEach(product => {
         let row = document.createElement('tr');
 
         let fields = [
-            'id', 'name', 'category', 'basis', 'appearance', 'color', 'softeningPoint', 'viscosity.30', 'viscosity.120',
-            'viscosity.140', 'viscosity.160', 'viscosity.180', 'viscosity.200', 'density', 'solidContent', 'ph',
-            'applicationTemperature', 'feedingSpeed', 'applicationQuantity', 'openTime'
+            'id', 'name', 'category', 'basis', 'appearance', 'color', 'softeningPoint', 'viscosity.30', 
+            'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180', 'viscosity.200', 'density', 
+            'solidContent', 'ph', 'applicationTemperature', 'feedingSpeed', 'applicationQuantity', 'openTime'
         ];
 
         fields.forEach(field => {
             let cell = document.createElement('td');
-            let value = getNestedValue(product, field) || '';  // Get value, default to empty string if undefined
+            let value = getNestedValue(product, field) || '';
             cell.textContent = value;
             row.appendChild(cell);
         });
