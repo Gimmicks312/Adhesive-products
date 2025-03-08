@@ -1,93 +1,94 @@
-/* General Table Styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+/* Basic styling for the popup */
+#advancedSearchPopup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
+    overflow: auto; /* Enable scroll if needed */
 }
 
-th, td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #ddd;
+/* Popup content */
+.popup-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Adjust width as needed */
+    max-width: 800px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-th {
-  background-color: #f2f2f2;
+/* Close button in the popup */
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-/* Filter Button Styling */
-button {
-  padding: 10px 20px;
-  margin: 10px 0;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-button:hover {
-  background-color: #45a049;
+/* Make sure the popup form fields are styled neatly */
+.popup-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
 }
 
-/* Modal Styling */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+.popup-form label {
+    width: 45%;
 }
 
-.modal-content {
-  background-color: #fff;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 50%; /* Could be more or less, depending on screen size */
+.popup-form input[type="number"],
+.popup-form input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+.popup-form input[type="number"]:focus,
+.popup-form input[type="text"]:focus {
+    border-color: #007BFF;
+    outline: none;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+/* Buttons for applying and resetting filters */
+.popup-form button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-/* Advanced Search Form Styling */
-#advancedSearchForm {
-  display: flex;
-  flex-direction: column;
+.popup-form button:hover {
+    background-color: #218838;
 }
 
-#advancedSearchForm label {
-  margin-bottom: 5px;
+.popup-form .reset-btn {
+    background-color: #dc3545;
 }
 
-#advancedSearchForm input[type="range"] {
-  margin-bottom: 15px;
+.popup-form .reset-btn:hover {
+    background-color: #c82333;
 }
 
-/* Search Button Styling in Modal */
-#searchAdvanced {
-  padding: 10px 20px;
-  background-color: #008CBA;
-  color: white;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
-
-#searchAdvanced:hover {
-  background-color: #007B9A;
+/* Adjust layout for smaller screens */
+@media screen and (max-width: 600px) {
+    .popup-form label {
+        width: 100%;
+    }
 }
