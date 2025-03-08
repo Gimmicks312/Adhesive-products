@@ -27,14 +27,15 @@ function displayProducts(products) {
         let row = document.createElement('tr');
 
         let fields = [
-            'id', 'name', 'category', 'basis', 'appearance', 'color', 'softeningPoint', 'viscosity.30', 
-            'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180', 'viscosity.200', 'density', 
-            'solidContent', 'ph', 'applicationTemperature', 'feedingSpeed', 'applicationQuantity', 'openTime'
+            'id', 'name', 'category', 'basis', 'appearance', 'color', 'softeningPoint',
+            'viscosity.30', 'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180',
+            'viscosity.200', 'density', 'solidContent', 'ph', 'applicationTemperature', 'feedingSpeed',
+            'applicationQuantity', 'openTime'
         ];
 
         fields.forEach(field => {
             let cell = document.createElement('td');
-            let value = getNestedValue(product, field) || ''; // Ensure empty fields are displayed as blank
+            let value = getNestedValue(product, field) || '';
             cell.textContent = value;
             row.appendChild(cell);
         });
