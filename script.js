@@ -34,7 +34,7 @@ function displayProducts(products) {
 
         fields.forEach(field => {
             let cell = document.createElement('td');
-            let value = getNestedValue(product, field) || '';
+            let value = getNestedValue(product, field) || ''; // Ensure empty fields are displayed as blank
             cell.textContent = value;
             row.appendChild(cell);
         });
