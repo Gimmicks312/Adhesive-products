@@ -1,12 +1,15 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle the "Advanced Search" button and the "Apply Filters" functionality
+document.addEventListener('DOMContentLoaded', function () {
+    // Ensure advanced search button and modal exist before adding event listeners
     const advancedSearchButton = document.getElementById('advancedSearchButton');
     const searchModal = document.getElementById('searchModal');
     const closeButton = document.getElementById('closeSearchModal');
     const applyFiltersButton = document.getElementById('applyFiltersButton');
-    
-    if (!advancedSearchButton || !searchModal || !closeButton || !applyFiltersButton) return; // Safety checks
-    
+
+    if (!advancedSearchButton || !searchModal || !closeButton || !applyFiltersButton) {
+        console.error('Error: Some modal elements are missing.');
+        return;
+    }
+
     advancedSearchButton.addEventListener('click', () => {
         searchModal.style.display = 'block';
     });
@@ -26,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const minPH = document.getElementById('minPH').value;
         const maxPH = document.getElementById('maxPH').value;
 
-        // Apply the filtering logic here, for example:
         let filteredProducts = productsData.filter(product => {
             let isValid = true;
 
@@ -42,3 +44,4 @@ document.addEventListener('DOMContentLoaded', function() {
         displayProducts(filteredProducts);
     }
 });
+
