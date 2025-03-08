@@ -1,74 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adhesive Products</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adhesive Products</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Adhesive Products</h1>
 
-  <!-- Filter Section -->
-  <div class="filters">
-    <label for="categoryFilter">Filter by Category:</label>
-    <select id="categoryFilter">
-      <option value="">All Categories</option>
-      <!-- Categories will be populated dynamically -->
-    </select>
-  </div>
+    <h1>Adhesive Products</h1>
 
-  <!-- Search Section -->
-  <input type="text" id="dynamicFilter" placeholder="Search...">
-  <br>
-  <button id="advancedSearchBtn">Advanced Search</button>
-
-  <!-- Table to display products -->
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Basis</th>
-        <th>Appearance</th>
-        <th>Color</th>
-        <th>Soft. P.</th>
-        <th>Visco 30°C</th>
-        <th>Visco 120°C</th>
-        <th>Visco 140°C</th>
-        <th>Visco 160°C</th>
-        <th>Visco 180°C</th>
-        <th>Visco 200°C</th>
-        <th>Density</th>
-        <th>Solid Content</th>
-        <th>pH</th>
-        <th>Application Temp.</th>
-        <th>Feeding Speed</th>
-        <th>Application Quantity</th>
-        <th>Open Time</th>
-      </tr>
-    </thead>
-    <tbody id="productTableBody">
-      <!-- Product rows will be inserted here -->
-    </tbody>
-  </table>
-
-  <!-- Advanced Search Pop-up -->
-  <div id="advancedSearchModal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <h2>Advanced Search</h2>
-      
-      <form id="advancedSearchForm">
-        <!-- Dynamic filters will be populated here -->
-      </form>
-      
-      <button id="searchAdvanced">Search</button>
+    <!-- Standard filters -->
+    <div>
+        <label for="filterCategory">Filter by Category:</label>
+        <select id="filterCategory" onchange="filterTableByCategory()">
+            <option value="">All</option>
+            <option value="Hotmelt">Hotmelt</option>
+            <option value="Water Base">Water Base</option>
+        </select>
     </div>
-  </div>
 
-  <script src="script.js"></script> <!-- Your existing script -->
-  <script src="scriptADSRC.js"></script> <!-- New script for advanced search -->
+    <div>
+        <label for="dynamicFilter">Dynamic Filter:</label>
+        <input type="text" id="dynamicFilter" onkeyup="dynamicFilterTable()">
+    </div>
+
+    <!-- Advanced search button -->
+    <button onclick="openAdvancedSearch()">Advanced Search</button>
+
+    <!-- Advanced search popup -->
+    <div id="advancedSearchPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeAdvancedSearch()">&times;</span>
+            <h2>Advanced Search</h2>
+
+            <form id="advancedSearchForm">
+                <div>
+                    <label for="softeningPointMin">Soft. P. (Min):</label>
+                    <input type="number" id="softeningPointMin">
+                    <label for="softeningPointMax">Soft. P. (Max):</label>
+                    <input type="number" id="softeningPointMax">
+                </div>
+
+                <div>
+                    <label for="viscosity30Min">Visco 30°C (Min):</label>
+                    <input type="number" id="viscosity30Min">
+                    <label for="viscosity30Max">Visco 30°C (Max):</label>
+                    <input type="number" id="viscosity30Max">
+                </div>
+
+                <div>
+                    <label for="viscosity120Min">Visco 120°C (Min):</label>
+                    <input type="number" id="viscosity120Min">
+                    <label for="viscosity120Max">Visco 120°C (Max):</label>
+                    <input type="number" id="viscosity120Max">
+                </div>
+
+                <div>
+                    <label for="viscosity140Min">Visco 140°C (Min):</label>
+                    <input type="number" id="viscosity140Min">
+                    <label for="viscosity140Max">Visco 140°C (Max):</label>
+                    <input type="number" id="viscosity140Max">
+                </div>
+
+                <div>
+                    <label for="viscosity160Min">Visco 160°C (Min):</label>
+                    <input type="number" id="viscosity160Min">
+                    <label for="viscosity160Max">Visco 160°C (Max):</label>
+                    <input type="number" id="viscosity160Max">
+                </div>
+
+                <div>
+                    <label for="viscosity180Min">Visco 180°C (Min):</label>
+                    <input type="number" id="viscosity180Min">
+                    <label for="viscosity180Max">Visco 180°C (Max):</label>
+                    <input type="number" id="viscosity180Max">
+                </div>
+
+                <div>
+                    <label for="viscosity200Min">Visco 200°C (Min):</label>
+                    <input type="number" id="viscosity200Min">
+                    <label for="viscosity200Max">Visco 200°C (Max):</label>
+                    <input type="number" id="viscosity200Max">
+                </div>
+
+                <div>
+                    <label for="densityMin">Density (Min):</label>
+                    <input type="number" id="densityMin">
+                    <label for="densityMax">Density (Max):</label>
+                    <input type="number" id="densityMax">
+                </div>
+
+                <div>
+                    <label for="solidContentMin">Solid Content (Min):</label>
+                    <input type="number" id="solidContentMin">
+                    <label for="solidContentMax">Solid Content (Max):</label>
+                    <input type="number" id="solidContentMax">
+                </div>
+
+                <div>
+                    <label for="phMin">pH (Min):</label>
+                    <input type="number" id="phMin">
+                    <label for="phMax">pH (Max):</label>
+                    <input type="number" id="phMax">
+                </div>
+
+                <div>
+                    <label for="applicationTempMin">Application Temp. (Min):</label>
+                    <input type="number" id="applicationTempMin">
+                    <label for="applicationTempMax">Application Temp. (Max):</label>
+                    <input type="number" id="applicationTempMax">
+                </div>
+
+                <div>
+                    <label for="feedingSpeedMin">Feeding Speed (Min):</label>
+                    <input type="number" id="feedingSpeedMin">
+                    <label for="feedingSpeedMax">Feeding Speed (Max):</label>
+                    <input type="number" id="feedingSpeedMax">
+                </div>
+
+                <div>
+                    <label for="applicationQuantityMin">Application Quantity (Min):</label>
+                    <input type="number" id="applicationQuantityMin">
+                    <label for="applicationQuantityMax">Application Quantity (Max):</label>
+                    <input type="number" id="applicationQuantityMax">
+                </div>
+
+                <div>
+                    <label for="openTimeMin">Open Time (Min):</label>
+                    <input type="number" id="openTimeMin">
+                    <label for="openTimeMax">Open Time (Max):</label>
+                    <input type="number" id="openTimeMax">
+                </div>
+
+                <button type="button" onclick="applyAdvancedSearch()">Search</button>
+                <button type="button" onclick="resetAdvancedSearch()">Reset</button>
+            </form>
+        </div>
+    </div>
+
+    <table id="productTable">
+        <!-- Table will be populated dynamically here -->
+    </table>
+
+    <script src="script.js"></script>
+    <script src="advancedsearch.js"></script>
 </body>
 </html>
