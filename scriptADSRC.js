@@ -1,4 +1,11 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    // Check if the necessary DOM elements exist
+    const tableBody = document.getElementById('productTableBody');
+    if (!tableBody) {
+        console.error('Error: productTableBody element not found.');
+        return;
+    }
+
     // Fetching the product data from the products.json file
     fetch('products.json')
         .then(response => response.json())
@@ -13,8 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to display products in the table
     function displayProducts(products) {
-        const tableBody = document.getElementById('productTableBody');
-        if (!tableBody) return;  // Safety check in case the table body element doesn't exist
+        // Ensure the table body exists before proceeding
+        if (!tableBody) {
+            console.error('Error: productTableBody element not found.');
+            return;
+        }
 
         tableBody.innerHTML = '';  // Clear previous data
 
@@ -50,7 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateCategoryFilter(products) {
         const categories = [...new Set(products.map(product => product.category))];
         const categorySelect = document.getElementById('categoryFilter');
-        if (!categorySelect) return;  // Safety check
+        if (!categorySelect) {
+            console.error('Error: categoryFilter element not found.');
+            return;
+        }
 
         categorySelect.innerHTML = '<option value="">All Categories</option>';
         categories.forEach(category => {
@@ -61,3 +74,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
