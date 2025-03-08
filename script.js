@@ -1,14 +1,6 @@
-// Initialize an empty array to store product data
-let productsData = [];
-
-// Fetch product data from the JSON file
-fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
+// Fetch product data
+fetch('products.json')
+    .then(response => response.json())
     .then(data => {
         productsData = data;
         displayProducts(productsData);
@@ -21,69 +13,64 @@ fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/prod
 // Function to display products in the table
 function displayProducts(products) {
     const tableBody = document.getElementById('productTableBody');
-    tableBody.innerHTML = '';
-
-    products.forEach(product => {
-        let row = document.createElement('tr');
-
-        let fields = [
-            'id', 'name', 'category', 'basis', 'appearance', 'color', 'softeningPoint',
-            'viscosity.30', 'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180',
-            'viscosity.200', 'density', 'solidContent', 'ph', 'applicationTemperature', 'feedingSpeed',
-            'applicationQuantity', 'openTime'
-        ];
-
-        fields.forEach(field => {
-            let cell = document.createElement('td');
-            let value = getNestedValue(product, field) || '';
-            cell.textContent = value;
-            row.appendChild(cell);
+    if (tableBody) {
+        tableBody.innerHTML = '';
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            for (const key in product) {
+                const cell = document.createElement('td');
+                cell.textContent = product[key];
+                row.appendChild(cell);
+            }
+            tableBody.appendChild(row);
         });
-
-        tableBody.appendChild(row);
-    });
+    } else {
+        console.error('Table body not found.');
+    }
 }
 
-// Helper function to safely access nested values in an object
-function getNestedValue(obj, path) {
-    return path.split('.').reduce((o, key) => (o && o[key] !== undefined ? o[key] : ''), obj);
-}
-
-// Function to populate the category filter dropdown
+// Function to populate category filter
 function populateCategoryFilter(products) {
-    const categoryFilter = document.getElementById('categoryFilter');
-    const categories = new Set();
-
-    products.forEach(product => {
-        if (product.category) {
-            categories.add(product.category);
-        }
-    });
-
-    categories.forEach(category => {
-        let option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        categoryFilter.appendChild(option);
-    });
+    const categorySet = new Set(products.map(product => product.Category));
+    const categoryFilter = document.getElementById('filterCategory');
+    if (categoryFilter) {
+        categorySet.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
+    } else {
+        console.error('Category filter element not found.');
+    }
 }
 
-// Filter products based on selected category
-document.getElementById('categoryFilter').addEventListener('change', function() {
-    const selectedCategory = this.value;
-    const filteredProducts = productsData.filter(product => 
-        product.category === selectedCategory || selectedCategory === ''
-    );
-    displayProducts(filteredProducts);
-});
+// Filter products by category
+function filterTableByCategory() {
+    const categoryFilter = document.getElementById('filterCategory');
+    const selectedCategory = categoryFilter ? categoryFilter.value : '';
+    const filteredData = selectedCategory
+        ? productsData.filter(product => product.Category === selectedCategory)
+        : productsData;
+    displayProducts(filteredData);
+}
 
-// Dynamic Search Functionality
-document.getElementById('dynamicFilter').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const filteredProducts = productsData.filter(product => {
-        return Object.values(product).some(value =>
-            String(value).toLowerCase().includes(searchTerm)
-        );
-    });
-    displayProducts(filteredProducts);
-});
+// Dynamic filter function for table
+function dynamicFilterTable() {
+    const filterValue = document.getElementById('dynamicFilter').value.toLowerCase();
+    const filteredData = productsData.filter(product =>
+        Object.values(product).some(val =>
+            val.toString().toLowerCase().includes(filterValue)
+        )
+    );
+    displayProducts(filteredData);
+}
+
+// Function to reset all filters (category and dynamic)
+function resetFilters() {
+    const categoryFilter = document.getElementById('filterCategory');
+    if (categoryFilter) categoryFilter.value = ''; // Reset category filter
+    const dynamicFilter = document.getElementById('dynamicFilter');
+    if (dynamicFilter) dynamicFilter.value = ''; // Reset dynamic filter
+    displayProducts(productsData); // Show all products
+}
