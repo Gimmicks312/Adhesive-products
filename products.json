@@ -95,7 +95,7 @@
     "applicationQuantity": "100-150 g/m²",
     "openTime": "90 sec"
   },
-   {
+  {
     "id": "5",
     "name": "Hotmelt Product 3",
     "category": "Hotmelt",
@@ -119,7 +119,7 @@
     "applicationQuantity": "",
     "openTime": ""
   },
-   {
+  {
     "id": "6",
     "name": "FoamGlue Product 1",
     "category": "Foam Glue",
