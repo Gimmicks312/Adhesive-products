@@ -1,78 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adhesive Products</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <title>Product Filter</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Adhesive Products</h1>
-    
-    <label for="categoryFilter">Filter by Category:</label>
-    <select id="categoryFilter">
-        <option value="">All</option>
-    </select>
-    
-    <label for="dynamicFilter">Search:</label>
-    <input type="text" id="dynamicFilter" placeholder="Enter value to filter">
-    
-    <button id="advancedSearchBtn">Advanced Search</button>
-    
-    <div id="advancedSearchModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Advanced Search</h2>
-            
-            <label for="temperatureSelect">Select Temperature:</label>
-            <select id="temperatureSelect">
-                <option value="120">120°C</option>
-                <option value="140">140°C</option>
-                <option value="160">160°C</option>
-            </select>
-            
-            <label for="viscosityMin">Viscosity Min:</label>
-            <input type="number" id="viscosityMin" placeholder="Min">
-            
-            <label for="viscosityMax">Viscosity Max:</label>
-            <input type="number" id="viscosityMax" placeholder="Max">
-            
-            <button id="applyAdvancedSearch">Apply</button>
-            <button id="resetAdvancedSearch">Reset</button>
-        </div>
-    </div>
-    
-    <table>
+  <!-- Search Inputs -->
+  <input type="text" id="dynamicFilter" placeholder="Search products...">
+  <select id="categoryFilter">
+    <option value="">All Categories</option>
+  </select>
+  <button id="advancedSearchBtn">Advanced Search</button>
+  
+  <!-- Products Table -->
+  <table border="1">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Basis</th>
-                <th>Appearance</th>
-                <th>Color</th>
-                <th>Soft. P.</th>
-                <th>Visco 30°C</th>
-                <th>Visco 120°C</th>
-                <th>Visco 140°C</th>
-                <th>Visco 160°C</th>
-                <th>Visco 180°C</th>
-                <th>Visco 200°C</th>
-                <th>Density</th>
-                <th>Solid Content</th>
-                <th>pH</th>
-                <th>Application Temp.</th>
-                <th>Feeding Speed</th>
-                <th>Application Quantity</th>
-                <th>Open Time</th>
-            </tr>
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>Category</td>
+        <td>Basis</td>
+        <td>Appearance</td>
+        <td>Color</td>
+        <td>Viscosity 30°C</td>
+        <td>Viscosity 120°C</td>
+        <td>Viscosity 140°C</td>
+        <td>Viscosity 160°C</td>
+        <td>Viscosity 180°C</td>
+        <td>Viscosity 200°C</td>
+        <td>Density</td>
+        <td>Softening Point</td>
+        <td>Application Temperature</td>
+        <td>Feeding Speed</td>
+        <td>Solid Content</td>
+        <td>pH-Value</td>
+        <td>Application Quantity</td>
+        <td>Open Time</td>
+    </tr>
         </thead>
         <tbody id="productTableBody">
             <!-- Data will be inserted dynamically -->
         </tbody>
     </table>
-    
-    <script src="script.js"></script>
-    <script src="advancedSearch.js"></script>
+
+  <!-- Advanced Search Modal -->
+  <div id="advancedSearchModal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Advanced Search</h3>
+      <label for="temperatureSelect">Temperature:</label>
+      <select id="temperatureSelect">
+         <option value="30">30</option>
+         <option value="120" selected>120</option>
+         <option value="140">140</option>
+         <option value="160">160</option>
+         <option value="180">180</option>
+         <option value="200">200</option>
+      </select>
+      <br>
+      <label for="viscosityMin">Viscosity Min:</label>
+      <input type="number" id="viscosityMin" placeholder="0">
+      <br>
+      <label for="viscosityMax">Viscosity Max:</label>
+      <input type="number" id="viscosityMax" placeholder="Infinity">
+      <br>
+      <button id="applyAdvancedSearch">Apply</button>
+      <button id="resetAdvancedSearch">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Global state for product data and filters
+      let productsData = [];
+      let dynamicSearchTerm = '';
+      let advancedFilterActive = false;
+      let advancedTemperature = "120";
+      let advancedMinViscosity = 0;
+      let advancedMaxViscosity = Infinity;
+      let selectedCategory = '';
+
+      // Fetch product data from JSON
+      fetch('https://raw.githubusercontent.com/Gimmicks312/Adhesive-products/main/products.json')
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          productsData = data;
+          displayProducts(productsData);
+          populateCategoryFilter(productsData);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+      // Display products in the table
+      function displayProducts(products) {
+        const tableBody = document.getElementById('productTableBody');
+        tableBody.innerHTML = '';
+        products.forEach(product => {
+          let row = document.createElement('tr');
+          let fields = [
+            'id', 'name', 'category', 'basis', 'appearance', 'color', 'softeningPoint', 
+            'viscosity.30', 'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180', 'viscosity.200', 
+            'density', 'solidContent', 'ph', 'applicationTemperature', 'feedingSpeed', 'applicationQuantity', 'openTime'
+          ];
+          fields.forEach(field => {
+            let cell = document.createElement('td');
+            let value = getNestedValue(product, field) || '';
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+          tableBody.appendChild(row);
+        });
+      }
+
+      // Helper to safely access nested properties
+      function getNestedValue(obj, path) {
+        return path.split('.').reduce((o, key) => (o && o[key] !== undefined ? o[key] : ''), obj);
+      }
+
+      // Populate category filter dropdown
+      function populateCategoryFilter(products) {
+        const categoryFilter = document.getElementById('categoryFilter');
+        const categories = new Set();
+        products.forEach(product => {
+          if (product.category) categories.add(product.category);
+        });
+        categories.forEach(category => {
+          let option = document.createElement('option');
+          option.value = category;
+          option.textContent = category;
+          categoryFilter.appendChild(option);
+        });
+      }
+
+      // Unified filter function combining dynamic, category, and advanced filters
+      function applyFilters() {
+        let filteredProducts = productsData;
+
+        // Dynamic search: remove commas from numbers within product JSON
+        if (dynamicSearchTerm) {
+          filteredProducts = filteredProducts.filter(product => {
+            let productStr = JSON.stringify(product);
+            // Remove commas between digits (e.g., "2,500" becomes "2500")
+            productStr = productStr.replace(/(\d),(\d)/g, '$1$2');
+            return productStr.toLowerCase().includes(dynamicSearchTerm.toLowerCase());
+          });
+        }
+
+        // Category filter
+        if (selectedCategory) {
+          filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
+        }
+
+        // Advanced search filter (remove commas before parsing)
+        if (advancedFilterActive) {
+          filteredProducts = filteredProducts.filter(product => {
+            let viscosityStr = getNestedValue(product, "viscosity." + advancedTemperature);
+            // Remove any commas before converting to a number
+            viscosityStr = viscosityStr.replace(/,/g, '');
+            const viscosityValue = parseFloat(viscosityStr) || 0;
+            return viscosityValue >= advancedMinViscosity && viscosityValue <= advancedMaxViscosity;
+          });
+        }
+
+        displayProducts(filteredProducts);
+      }
+
+      // Event listener for dynamic search input
+      document.getElementById('dynamicFilter').addEventListener('input', function() {
+        dynamicSearchTerm = this.value;
+        applyFilters();
+      });
+
+      // Event listener for category selection
+      document.getElementById('categoryFilter').addEventListener('change', function() {
+        selectedCategory = this.value;
+        applyFilters();
+      });
+
+      // Advanced Search Modal Handling
+      const advancedSearchBtn = document.getElementById("advancedSearchBtn");
+      const advancedSearchModal = document.getElementById("advancedSearchModal");
+      const closeBtn = document.querySelector(".close-btn");
+      const applyAdvancedSearch = document.getElementById("applyAdvancedSearch");
+      const resetAdvancedSearch = document.getElementById("resetAdvancedSearch");
+
+      advancedSearchBtn.addEventListener("click", () => {
+        advancedSearchModal.style.display = "block";
+      });
+
+      closeBtn.addEventListener("click", () => {
+        advancedSearchModal.style.display = "none";
+      });
+
+      window.addEventListener("click", (event) => {
+        if (event.target === advancedSearchModal) {
+          advancedSearchModal.style.display = "none";
+        }
+      });
+
+      // Apply advanced search filters and update state
+      applyAdvancedSearch.addEventListener("click", () => {
+        advancedTemperature = document.getElementById("temperatureSelect").value;
+        advancedMinViscosity = parseFloat(document.getElementById("viscosityMin").value) || 0;
+        advancedMaxViscosity = parseFloat(document.getElementById("viscosityMax").value) || Infinity;
+        advancedFilterActive = true;
+        advancedSearchModal.style.display = "none";
+        applyFilters();
+      });
+
+      // Reset advanced search parameters
+      resetAdvancedSearch.addEventListener("click", () => {
+        document.getElementById("temperatureSelect").value = "120";
+        document.getElementById("viscosityMin").value = "";
+        document.getElementById("viscosityMax").value = "";
+        advancedFilterActive = false;
+        advancedSearchModal.style.display = "none";
+        applyFilters();
+      });
+    });
+  </script>
 </body>
 </html>
