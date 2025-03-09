@@ -94,7 +94,7 @@
     "ph": "5.5",
     "applicationQuantity": "100-150 g/m²",
     "openTime": "90 sec"
-  }
+  },
    {
     "id": "5",
     "name": "Hotmelt Product 3",
@@ -142,5 +142,5 @@
     "ph": "",
     "applicationQuantity": "80-120 g/m²",
     "openTime": "3-5 min"
-  },
+  }
 ]
