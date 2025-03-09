@@ -17,6 +17,31 @@
     <label for="dynamicFilter">Search:</label>
     <input type="text" id="dynamicFilter" placeholder="Enter value to filter">
     
+    <button id="advancedSearchBtn">Advanced Search</button>
+    
+    <div id="advancedSearchModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Advanced Search</h2>
+            
+            <label for="temperatureSelect">Select Temperature:</label>
+            <select id="temperatureSelect">
+                <option value="120">120°C</option>
+                <option value="140">140°C</option>
+                <option value="160">160°C</option>
+            </select>
+            
+            <label for="viscosityMin">Viscosity Min:</label>
+            <input type="number" id="viscosityMin" placeholder="Min">
+            
+            <label for="viscosityMax">Viscosity Max:</label>
+            <input type="number" id="viscosityMax" placeholder="Max">
+            
+            <button id="applyAdvancedSearch">Apply</button>
+            <button id="resetAdvancedSearch">Reset</button>
+        </div>
+    </div>
+    
     <table>
         <thead>
             <tr>
@@ -48,5 +73,6 @@
     </table>
     
     <script src="script.js"></script>
+    <script src="advancedSearch.js"></script>
 </body>
 </html>
