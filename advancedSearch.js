@@ -21,11 +21,11 @@ window.addEventListener("click", (event) => {
 
 applyAdvancedSearch.addEventListener("click", () => {
     const selectedTemperature = document.getElementById("temperatureSelect").value;
-    const minViscosity = parseFloat(document.getElementById("viscosityMin").value) || 0;
-    const maxViscosity = parseFloat(document.getElementById("viscosityMax").value) || Infinity;
+    const minViscosity = parseFloat(document.getElementById("viscosityMin").value.replace(/,/g, "")) || 0;
+    const maxViscosity = parseFloat(document.getElementById("viscosityMax").value.replace(/,/g, "")) || Infinity;
     
     const filteredProducts = productsData.filter(product => {
-        const viscosityValue = parseFloat(product["viscosity." + selectedTemperature]) || 0;
+        const viscosityValue = parseFloat((product["viscosity." + selectedTemperature] || "").replace(/,/g, "")) || 0;
         return viscosityValue >= minViscosity && viscosityValue <= maxViscosity;
     });
     
@@ -40,3 +40,4 @@ resetAdvancedSearch.addEventListener("click", () => {
     displayProducts(productsData);
     advancedSearchModal.style.display = "none";
 });
+
