@@ -1,94 +1,29 @@
-/* Basic styling for the popup */
-#advancedSearchPopup {
-    display: none; /* Hidden by default */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
-    overflow: auto; /* Enable scroll if needed */
-}
-
-/* Popup content */
-.popup-content {
-    background-color: #fff;
-    margin: 5% auto;
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Adjust width as needed */
-    max-width: 800px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Close button in the popup */
-.close-btn {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+h1 {
+    text-align: center;
 }
 
-.close-btn:hover,
-.close-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Make sure the popup form fields are styled neatly */
-.popup-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: space-between;
-}
-
-.popup-form label {
-    width: 45%;
-}
-
-.popup-form input[type="number"],
-.popup-form input[type="text"] {
+table {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-.popup-form input[type="number"]:focus,
-.popup-form input[type="text"]:focus {
-    border-color: #007BFF;
-    outline: none;
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
 }
 
-/* Buttons for applying and resetting filters */
-.popup-form button {
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+th {
+    background-color: #f4f4f4;
 }
 
-.popup-form button:hover {
-    background-color: #218838;
-}
-
-.popup-form .reset-btn {
-    background-color: #dc3545;
-}
-
-.popup-form .reset-btn:hover {
-    background-color: #c82333;
-}
-
-/* Adjust layout for smaller screens */
-@media screen and (max-width: 600px) {
-    .popup-form label {
-        width: 100%;
-    }
+select {
+    margin: 10px 0;
 }
