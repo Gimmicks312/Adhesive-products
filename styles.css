@@ -73,23 +73,33 @@ th {
   position: relative;
 }
 
-/* Column Collapse Styles */
-.collapsed-column {
-  width: 20px !important; /* Minimized column width */
-  overflow: hidden;
-  white-space: nowrap;
+/* Collapsible Column Styles */
+/* Header arrow */
+th.collapsible {
+  cursor: pointer;
+  padding-right: 20px;
 }
 
-.collapsed-column .cell-content {
-  display: none; /* Hide content in collapsed mode */
-}
-
-.collapse-toggle {
+th.collapsible:after {
+  content: '▼';
   position: absolute;
   right: 5px;
-  cursor: pointer;
   font-size: 12px;
-  color: #fff;
+}
+
+th.collapsed:after {
+  content: '▲';
+}
+
+/* Instead of hiding the cells, we reduce their width and hide the text */
+td.collapsed-cell {
+  width: 5px !important;
+  min-width: 5px !important;
+  max-width: 5px !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-indent: -9999px; /* Hides the text while preserving the cell structure */
+  padding: 8px 0; /* Adjust vertical padding as needed */
 }
 
 /* Modal Styles */
