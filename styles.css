@@ -70,6 +70,26 @@ th, td {
 th {
   background-color: #FFA500; /* Orange header */
   color: #fff;
+  position: relative;
+}
+
+/* Column Collapse Styles */
+.collapsed-column {
+  width: 20px !important; /* Minimized column width */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.collapsed-column .cell-content {
+  display: none; /* Hide content in collapsed mode */
+}
+
+.collapse-toggle {
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #fff;
 }
 
 /* Modal Styles */
