@@ -11,18 +11,18 @@
       position: relative;
       padding-right: 20px;
     }
-
+    
     th.collapsible:after {
       content: '▼';
       position: absolute;
       right: 5px;
       font-size: 12px;
     }
-
+    
     th.collapsed:after {
       content: '▲';
     }
-
+    
     td.collapsed-cell {
       display: none;
     }
@@ -88,7 +88,7 @@
       <label for="viscosityMax">Viscosity Max:</label>
       <input type="number" id="viscosityMax" placeholder="Infinity">
       <br>
-
+      
       <!-- New Density Range Inputs -->
       <label for="densityMin">Density Min:</label>
       <input type="number" id="densityMin" placeholder="0">
@@ -96,7 +96,7 @@
       <label for="densityMax">Density Max:</label>
       <input type="number" id="densityMax" placeholder="Infinity">
       <br>
-
+      
       <button id="applyAdvancedSearch">Apply</button>
       <button id="resetAdvancedSearch">Reset</button>
     </div>
@@ -196,7 +196,7 @@
         if (dynamicSearchTerm) {
           filteredProducts = filteredProducts.filter(product => {
             let productStr = JSON.stringify(product);
-            productStr = productStr.replace(/(\d),(\d)/g, '$1$2');
+            productStr = productStr.replace(/(\\d),(\\d)/g, '$1$2');
             return productStr.toLowerCase().includes(dynamicSearchTerm.toLowerCase());
           });
         }
@@ -284,13 +284,23 @@
         advancedSearchModal.style.display = "none";
       });
 
-      // Add collapsible column functionality
+      // Add improved collapsible column functionality
       document.querySelectorAll("th.collapsible").forEach(header => {
+        // Store original header text for later restoration
+        header.dataset.text = header.textContent.trim();
         header.addEventListener("click", () => {
           const index = Array.from(header.parentNode.children).indexOf(header);
           const rows = document.querySelectorAll("tbody tr");
           
           header.classList.toggle('collapsed');
+          if (header.classList.contains('collapsed')) {
+            // Show only the arrow when collapsed
+            header.innerHTML = "<span class='collapse-arrow'>▲</span>";
+          } else {
+            // Restore original header text and arrow when expanded
+            header.innerHTML = header.dataset.text + " <span class='collapse-arrow'>▼</span>";
+          }
+          
           rows.forEach(row => {
             const cell = row.cells[index];
             cell.classList.toggle('collapsed-cell');
