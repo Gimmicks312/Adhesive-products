@@ -16,30 +16,27 @@
   
   <!-- Products Table -->
   <table border="1">
-    <thead>
-      <tr>
-        <th class="collapsible">ID</th>
-        <th class="collapsible">Name</th>
-        <th class="collapsible">Category</th>
-        <th class="collapsible">Basis</th>
-        <th class="collapsible">Appearance</th>
-        <th class="collapsible">Color</th>
-        <th class="collapsible">Viscosity 30°C</th>
-        <th class="collapsible">Viscosity 120°C</th>
-        <th class="collapsible">Viscosity 140°C</th>
-        <th class="collapsible">Viscosity 160°C</th>
-        <th class="collapsible">Viscosity 180°C</th>
-        <th class="collapsible">Viscosity 200°C</th>
-        <th class="collapsible">Density</th>
-        <th class="collapsible">Softening Point</th>
-        <th class="collapsible">Application Temperature</th>
-        <th class="collapsible">Feeding Speed</th>
-        <th class="collapsible">Solid Content</th>
-        <th class="collapsible">pH-Value</th>
-        <th class="collapsible">Application Quantity</th>
-        <th class="collapsible">Open Time</th>
-      </tr>
-    </thead>
+        <thead>
+            <tr>
+                <th>Parameter <button class="toggle-btn">▼</button></th>
+                <th class="collapsible-header">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Basis</td>
+                <td class="collapsible-cell">EVA</td>
+            </tr>
+            <tr>
+                <td>Appearance</td>
+                <td class="collapsible-cell">Granular</td>
+            </tr>
+            <tr>
+                <td>Colour</td>
+                <td class="collapsible-cell">Natural</td>
+            </tr>
+        </tbody>
+    </table>
     <tbody id="productTableBody">
       <!-- Data will be inserted dynamically -->
     </tbody>
@@ -260,28 +257,30 @@
         advancedSearchModal.style.display = "none";
       });
 
-      // Improved collapsible column functionality
-      document.querySelectorAll("th.collapsible").forEach(header => {
-        // Save original header text
-        header.dataset.text = header.textContent.trim();
-        header.addEventListener("click", () => {
-          const index = Array.from(header.parentNode.children).indexOf(header);
-          const rows = document.querySelectorAll("tbody tr");
-          header.classList.toggle('collapsed');
-          if (header.classList.contains('collapsed')) {
-            // When collapsed, show only the arrow
-            header.innerHTML = "<span class='collapse-arrow'>▲</span>";
-          } else {
-            // Restore header text and arrow
-            header.innerHTML = header.dataset.text + " <span class='collapse-arrow'>▼</span>";
-          }
-          rows.forEach(row => {
-            const cell = row.cells[index];
-            cell.classList.toggle('collapsed-cell');
-          });
+     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleButton = document.querySelector(".toggle-btn");
+            const header = document.querySelector(".collapsible-header");
+            const cells = document.querySelectorAll(".collapsible-cell");
+            
+            toggleButton.addEventListener("click", function () {
+                const isCollapsed = header.classList.toggle("collapsed");
+                
+                cells.forEach(cell => {
+                    if (isCollapsed) {
+                        cell.textContent = ""; // Overwrite fetched data
+                    } else {
+                        cell.textContent = cell.dataset.originalValue; // Restore original value
+                    }
+                });
+            });
+
+            // Store original values for restoration
+            cells.forEach(cell => {
+                cell.dataset.originalValue = cell.textContent;
+            });
         });
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
+
