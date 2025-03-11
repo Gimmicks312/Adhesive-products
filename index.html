@@ -4,29 +4,7 @@
   <meta charset="utf-8">
   <title>ADINO Product Database</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Add arrow styling */
-    th.collapsible {
-      cursor: pointer;
-      position: relative;
-      padding-right: 20px;
-    }
-    
-    th.collapsible:after {
-      content: '▼';
-      position: absolute;
-      right: 5px;
-      font-size: 12px;
-    }
-    
-    th.collapsed:after {
-      content: '▲';
-    }
-    
-    td.collapsed-cell {
-      display: none;
-    }
-  </style>
+  <!-- No inline styles needed here; CSS is in styles.css -->
 </head>
 <body>
   <!-- Search Inputs -->
@@ -88,7 +66,6 @@
       <label for="viscosityMax">Viscosity Max:</label>
       <input type="number" id="viscosityMax" placeholder="Infinity">
       <br>
-      
       <!-- New Density Range Inputs -->
       <label for="densityMin">Density Min:</label>
       <input type="number" id="densityMin" placeholder="0">
@@ -96,7 +73,6 @@
       <label for="densityMax">Density Max:</label>
       <input type="number" id="densityMax" placeholder="Infinity">
       <br>
-      
       <button id="applyAdvancedSearch">Apply</button>
       <button id="resetAdvancedSearch">Reset</button>
     </div>
@@ -138,10 +114,10 @@
           
           // Correct field order based on the columns in your table
           let fields = [
-              'id', 'name', 'category', 'basis', 'appearance', 'color', 
-              'viscosity.30', 'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180', 'viscosity.200', 
-              'density', 'softeningPoint', 'applicationTemperature', 'feedingSpeed', 'ph', 'solidContent', 
-              'applicationQuantity', 'openTime'
+            'id', 'name', 'category', 'basis', 'appearance', 'color', 
+            'viscosity.30', 'viscosity.120', 'viscosity.140', 'viscosity.160', 'viscosity.180', 'viscosity.200', 
+            'density', 'softeningPoint', 'applicationTemperature', 'feedingSpeed', 'ph', 'solidContent', 
+            'applicationQuantity', 'openTime'
           ];
 
           fields.forEach(field => {
@@ -149,8 +125,8 @@
             let value = getNestedValue(product, field) || '';
 
             if (field.startsWith('viscosity.')) {
-              let temp = field.split('.')[1]; // Extract the temperature (e.g. 30, 120, etc.)
-              value = getNestedValue(product, 'viscosity.' + temp) || ''; // Get the corresponding viscosity value
+              let temp = field.split('.')[1];
+              value = getNestedValue(product, 'viscosity.' + temp) || '';
             }
             
             // Swap values for solidContent and ph
@@ -160,11 +136,11 @@
               value = getNestedValue(product, 'solidContent') || '';
             }
             
-            cell.textContent = value; // Place the value in the table cell
+            cell.textContent = value;
             row.appendChild(cell);
           });
 
-          tableBody.appendChild(row); // Add the row to the table
+          tableBody.appendChild(row);
         });
       }
 
@@ -284,23 +260,21 @@
         advancedSearchModal.style.display = "none";
       });
 
-      // Add improved collapsible column functionality
+      // Improved collapsible column functionality
       document.querySelectorAll("th.collapsible").forEach(header => {
-        // Store original header text for later restoration
+        // Save original header text
         header.dataset.text = header.textContent.trim();
         header.addEventListener("click", () => {
           const index = Array.from(header.parentNode.children).indexOf(header);
           const rows = document.querySelectorAll("tbody tr");
-          
           header.classList.toggle('collapsed');
           if (header.classList.contains('collapsed')) {
-            // Show only the arrow when collapsed
+            // When collapsed, show only the arrow
             header.innerHTML = "<span class='collapse-arrow'>▲</span>";
           } else {
-            // Restore original header text and arrow when expanded
+            // Restore header text and arrow
             header.innerHTML = header.dataset.text + " <span class='collapse-arrow'>▼</span>";
           }
-          
           rows.forEach(row => {
             const cell = row.cells[index];
             cell.classList.toggle('collapsed-cell');
