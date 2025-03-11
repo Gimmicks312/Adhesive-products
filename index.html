@@ -16,7 +16,7 @@
   
   <!-- Products Table -->
   <table border="1">
-       <thead>
+    <thead>
       <tr>
         <th class="collapsible">ID</th>
         <th class="collapsible">Name</th>
@@ -40,7 +40,6 @@
         <th class="collapsible">Open Time</th>
       </tr>
     </thead>
-    </table>
     <tbody id="productTableBody">
       <!-- Data will be inserted dynamically -->
     </tbody>
@@ -80,7 +79,7 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", function () {
       // Global state for product data and filters
       let productsData = [];
       let dynamicSearchTerm = '';
@@ -103,7 +102,9 @@
           displayProducts(productsData);
           populateCategoryFilter(productsData);
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
 
       // Display products in the table
       function displayProducts(products) {
@@ -173,7 +174,6 @@
         if (dynamicSearchTerm) {
           filteredProducts = filteredProducts.filter(product => {
             let productStr = JSON.stringify(product);
-            productStr = productStr.replace(/(\\d),(\\d)/g, '$1$2');
             return productStr.toLowerCase().includes(dynamicSearchTerm.toLowerCase());
           });
         }
@@ -251,39 +251,34 @@
         document.getElementById("viscosityMax").value = "";
         document.getElementById("densityMin").value = "";
         document.getElementById("densityMax").value = "";
-        advancedTemperature = "120";
-        advancedMinViscosity = 0;
-        advancedMaxViscosity = Infinity;
-        advancedMinDensity = 0;
-        advancedMaxDensity = Infinity;
+        advancedSearchModal.style.display = "none";
         advancedFilterActive = false;
         applyFilters();
-        advancedSearchModal.style.display = "none";
       });
 
-   
-        document.addEventListener("DOMContentLoaded", function () {
-            const toggleButton = document.querySelector(".toggle-btn");
-            const header = document.querySelector(".collapsible-header");
-            const cells = document.querySelectorAll(".collapsible-cell");
-            
-            toggleButton.addEventListener("click", function () {
-                const isCollapsed = header.classList.toggle("collapsed");
-                
-                cells.forEach(cell => {
-                    if (isCollapsed) {
-                        cell.textContent = ""; // Overwrite fetched data
-                    } else {
-                        cell.textContent = cell.dataset.originalValue; // Restore original value
-                    }
-                });
-            });
-
-            // Store original values for restoration
-            cells.forEach(cell => {
-                cell.dataset.originalValue = cell.textContent;
-            });
+      // Collapsible functionality
+      const toggleButton = document.querySelector(".toggle-btn");
+      const header = document.querySelector(".collapsible-header");
+      const cells = document.querySelectorAll(".collapsible-cell");
+      
+      toggleButton.addEventListener("click", function () {
+        const isCollapsed = header.classList.toggle("collapsed");
+        
+        cells.forEach(cell => {
+          if (isCollapsed) {
+            cell.textContent = ""; // Overwrite fetched data
+          } else {
+            cell.textContent = cell.dataset.originalValue; // Restore original value
+          }
         });
+      });
+
+      // Store original values for restoration
+      cells.forEach(cell => {
+        cell.dataset.originalValue = cell.textContent;
+      });
+
+    });
+  </script>
 </body>
 </html>
-
